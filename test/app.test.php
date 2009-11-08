@@ -4,10 +4,17 @@ include_once('ice/app.php');
 
 class AppTest extends UnitTestCase
 {
-    public function testSimpleUrl()
+    public function get_content()
+    {
+        $content = ob_get_contents();
+        ob_end_clean();
+        return $content;
+    }
+
+    public function testCallClass()
     {
         ob_start(); app(array('.*' => 'BufferConstructTest'), '');
-        $contents = ob_get_contents(); ob_end_clean();
+        $contents = $this->get_content();
         $this->assertEqual('Hello!', $contents, 'Foi chamada a classe BufferConstructTest. %s');
     }
 }
