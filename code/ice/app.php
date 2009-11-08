@@ -12,8 +12,13 @@ function ice_error($code, $message, $method='GET')
 
 function app($urls, $url=null, $method = null)
 {
+    if (null===$url) {
+        $url = isset($_SERVER['PATH_INFO']) ? $_SERVER['PATH_INFO'] : '';
+    }
     if (null===$method) {
-        $method = isset($_SERVER['REQUEST_METHOD']) ? $_SERVER['REQUEST_METHOD'] : 'GET';
+        $method = isset($_SERVER['REQUEST_METHOD']) ?
+                    $_SERVER['REQUEST_METHOD'] : 
+                    'GET';
     }
     foreach ($urls as $regexp => $className) {
         $regexp = '@'.str_replace('@', '\@', $regexp).'@';
