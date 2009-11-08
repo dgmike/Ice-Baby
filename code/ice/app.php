@@ -1,6 +1,8 @@
 <?php
 error_reporting(E_ALL);
 
+include_once 'default_controller.php';
+
 function ice_error($code, $message, $method='GET')
 {
     $error_class = new Error;

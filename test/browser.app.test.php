@@ -25,7 +25,7 @@ class BroserAppTest extends WebTestCase
             'Deve chamar uma url com os parâmetros. %s');
     }
 
-    public function testNotFound()
+    public function testClassFound()
     {
         $return = $this->get(TEST_ICE_BASE_URL.'/home.php/not/found');
         $paginaDeErro = <<<EOF
@@ -35,11 +35,12 @@ class BroserAppTest extends WebTestCase
         <title>404 Page Not Found</title>
     </head>
     <body>
-        <h1>404 - Page Not found</h1>
+        <h1>404 - Page Not Found</h1>
         <p>Please make contact with your administrator.</p>
     </body>
 </html>
 EOF;
-        $this->assertEqual($return, $paginaDeErro, 'Retornou uma página de erro padrão. %s');
+        $this->assertEqual($return, $paginaDeErro, 'Retornou a página de erro padrão. %s');
     }
+
 }
