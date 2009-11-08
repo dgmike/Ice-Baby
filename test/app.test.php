@@ -40,8 +40,7 @@ class AppTest extends UnitTestCase
 
     public function testArgs()
     {
-        ob_start();
-        app(array(
+        ob_start(); app(array(
                 '/(post|category)/(\d+)/?' => 'BufferMethodArgsTest'
             ), '/post/25');
         $contents = get_content();
@@ -55,12 +54,20 @@ class AppTest extends UnitTestCase
             '', 12, new stdClass, 12.3
         );
         foreach ($tests as $test) {
-            ob_start();app($test, '');
+            ob_start(); app($test, '');
             $contents = get_content();
             $this->assertEqual("Classe Erro\n500 - Argument invalid", $contents,
                 'Este tipo de dado não pode ser passado para o app: '.
                 gettype($test).'. %s');
         }
+    }
+
+    public function testClassInvalid()
+    {
+        ob_start(); app(array('.*' => 'InvalidClass'));
+        $contents = get_content();
+        $this->assertEqual("Classe Erro\n501 - Class Not Found", $contents,
+            'A classe não foi encontrada no sistema. %s');
     }
 }
 
@@ -70,6 +77,7 @@ class Ice_ErrorTest extends UnitTestCase
     {
         ob_start(); ice_error(404, 'Page Not Found', 'GET');
         $contents = get_content();
-        $this->assertEqual($contents, "Classe Erro\n404 - Page Not Found", 'Página não encontrada. %s');
+        $this->assertEqual($contents, "Classe Erro\n404 - Page Not Found",
+            'Página não encontrada. %s');
     }
 }

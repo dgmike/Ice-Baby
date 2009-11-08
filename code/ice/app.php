@@ -27,6 +27,10 @@ function app($urls, $url=null, $method = null)
     foreach ($urls as $regexp => $className) {
         $regexp = '@'.str_replace('@', '\@', $regexp).'@';
         if (preg_match($regexp, $url, $args)) {
+            if (!class_exists($className)) {
+                ice_error(501, 'Class Not Found', $method);
+                return false;
+            }
             $class = new $className;
             if ($args) {
                 array_shift($args);
