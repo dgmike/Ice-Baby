@@ -42,6 +42,10 @@ class BufferMethodArgsTest
     }
 }
 
+class BufferNotMethod
+{
+}
+
 class Error
 {
     public $error_code;

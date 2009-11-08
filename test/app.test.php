@@ -69,6 +69,14 @@ class AppTest extends UnitTestCase
         $this->assertEqual("Classe Erro\n501 - Class Not Found", $contents,
             'A classe não foi encontrada no sistema. %s');
     }
+
+    public function testMethodInvalid()
+    {
+        ob_start(); app(array('.*' => 'BufferNotMethod', '', 'GET'));
+        $contents = get_content();
+        $this->assertEqual("Classe Erro\n501 - Method Not Found", $contents,
+           'O método não foi encontrado na classe. %s'); 
+    }
 }
 
 class Ice_ErrorTest extends UnitTestCase

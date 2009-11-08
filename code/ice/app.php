@@ -24,6 +24,7 @@ function app($urls, $url=null, $method = null)
                     $_SERVER['REQUEST_METHOD'] : 
                     'GET';
     }
+    $method = strtolower($method);
     foreach ($urls as $regexp => $className) {
         $regexp = '@'.str_replace('@', '\@', $regexp).'@';
         if (preg_match($regexp, $url, $args)) {
@@ -32,10 +33,14 @@ function app($urls, $url=null, $method = null)
                 return false;
             }
             $class = new $className;
+            if (!is_callable(array($class, $method))) {
+                ice_error(501, 'Method Not Found', $method);
+                return false;
+            }
             if ($args) {
                 array_shift($args);
             }
-            call_user_func_array(array($class, strtolower($method)), $args);
+            call_user_func_array(array($class, $method), $args);
             return;
         }
     }
