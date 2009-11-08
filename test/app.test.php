@@ -18,7 +18,7 @@ class AppTest extends UnitTestCase
         $this->assertEqual('Hello!', $contents, 'Foi chamada a classe BufferConstructTest. %s');
     }
 
-    public function testCallGetPost()
+    public function testCallGetPostAny()
     {
         ob_start(); app(array('.*' => 'BufferMethodTest'), '', 'GET');
         $contents = $this->get_content();
@@ -27,5 +27,9 @@ class AppTest extends UnitTestCase
         ob_start(); app(array('.*' => 'BufferMethodTest'), '', 'POST');
         $contents = $this->get_content();
         $this->assertEqual('post', $contents, 'Foi chamado o metodo post pelo REQUEST. %s');
+
+        ob_start(); app(array('.*' => 'BufferMethodTest'), '', 'ANY');
+        $contents = $this->get_content();
+        $this->assertEqual('any', $contents, 'Foi chamado o metodo any pelo REQUEST. %s');
     }
 }
