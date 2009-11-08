@@ -17,3 +17,11 @@ class BufferConstructTest
 
     public function __call($method, $args) { }
 }
+
+class BufferMethodTest
+{
+    public function __call($method, $args)
+    {
+        print $method;
+    }
+}
