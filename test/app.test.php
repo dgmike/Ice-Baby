@@ -32,6 +32,13 @@ class AppTest extends UnitTestCase
         $contents = get_content();
         $this->assertEqual("Classe Erro\n404 - Page Not Found", $contents, 'A url nao foi encontrada na lista desejada. %s');
     }
+
+    public function testArgs()
+    {
+        ob_start(); app(array('/(post|category)/(\d+)/?' => 'BufferMethodArgsTest'), '/post/25');
+        $contents = get_content();
+        $this->assertEqual("Called get\n".var_export(array('post', '25'), true), $contents, 'Deveria retornar o metodo com os argumentos. %s');
+    }
 }
 
 class Ice_ErrorTest extends UnitTestCase

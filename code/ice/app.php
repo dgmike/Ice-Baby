@@ -19,7 +19,10 @@ function app($urls, $url=null, $method = null)
         $regexp = '@'.str_replace('@', '\@', $regexp).'@';
         if (preg_match($regexp, $url, $args)) {
             $class = new $className;
-            call_user_func(array($class, strtolower($method)));
+            if ($args) {
+                array_shift($args);
+            }
+            call_user_func_array(array($class, strtolower($method)), $args);
             return;
         }
     }

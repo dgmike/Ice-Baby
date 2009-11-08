@@ -33,6 +33,15 @@ class BufferMethodTest
     }
 }
 
+class BufferMethodArgsTest
+{
+    public function __call($method, $args)
+    {
+        print "Called $method\n";
+        var_export($args);
+    }
+}
+
 class Error
 {
     public $error_code;
