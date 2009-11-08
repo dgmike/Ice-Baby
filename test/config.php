@@ -8,6 +8,13 @@ include_once dirname(dirname(__FILE__))
              .DIRECTORY_SEPARATOR.'simpletest'
              .DIRECTORY_SEPARATOR.'autorun.php';
 
+function get_content()
+{
+    $content = ob_get_contents();
+    ob_end_clean();
+    return $content;
+}
+
 class BufferConstructTest
 {
     public function __construct()
@@ -23,5 +30,21 @@ class BufferMethodTest
     public function __call($method, $args)
     {
         print $method;
+    }
+}
+
+class Error
+{
+    public $error_code;
+    public $error_message;
+
+    public function __construct()
+    {
+        print "Classe Erro\n";
+    }
+
+    public function get() 
+    {
+        print $this->error_code.' - '.$this->error_message;
     }
 }
