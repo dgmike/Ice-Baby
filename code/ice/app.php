@@ -12,6 +12,10 @@ function ice_error($code, $message, $method='GET')
 
 function app($urls, $url=null, $method = null)
 {
+    if ('array' !== gettype($urls)) {
+        ice_error(500, 'Argument invalid');
+        return false;
+    }
     if (null===$url) {
         $url = isset($_SERVER['PATH_INFO']) ? $_SERVER['PATH_INFO'] : '';
     }

@@ -39,6 +39,20 @@ class AppTest extends UnitTestCase
         $contents = get_content();
         $this->assertEqual("Called get\n".var_export(array('post', '25'), true), $contents, 'Deveria retornar o metodo com os argumentos. %s');
     }
+
+    public function testOnlyArray()
+    {
+        $tests = array(
+            '', 12, new stdClass, 12.3
+        );
+        foreach ($tests as $test) {
+            ob_start();app($test, '');
+            $contents = get_content();
+            $this->assertEqual("Classe Erro\n500 - Argument invalid", $contents,
+                'Este tipo de dado não pode ser passado para o app: '.
+                gettype($test).'. %s');
+        }
+    }
 }
 
 class Ice_ErrorTest extends UnitTestCase
