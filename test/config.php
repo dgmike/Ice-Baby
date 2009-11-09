@@ -71,7 +71,7 @@ function createDatabase()
     unlink($file);
     $conn = new PDO('sqlite://'.$file);
     $conn->query('CREATE TABLE user (
-        id_usuario INTEGER PRIMARY KEY,
+        id_user INTEGER PRIMARY KEY,
         nome TEXT,
         idade INTEGER
     )');
