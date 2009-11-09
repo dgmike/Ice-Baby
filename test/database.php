@@ -32,4 +32,14 @@ class ModelTest extends UnitTestCase
         $this->assertEqual(2, $result->fetchObject()->C,
             'Deveria retornar dois. %s');
     }
+
+    public function testGet()
+    {
+        $user = new User;
+        $result = $user->get(1);
+        $this->assertEqual(get_class($result), 'Model_Result',
+            'O retorno do get é um Model_Result. %s');
+        $this->assertEqual('Alice', $result->nome, 
+            'Deveria retornar o primeiro resultado');
+    }
 }

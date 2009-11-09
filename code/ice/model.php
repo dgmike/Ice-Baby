@@ -3,7 +3,6 @@ class Model extends PDO
 {
     public $_table = null;
     public $_key = null;
-    public $_conn;
 
     public function __construct($dns=null, $username=null, $password=null,
             array $driver_options = array())
@@ -29,4 +28,17 @@ class Model extends PDO
         }
         parent::__construct($dns, $username, $password, $driver_options);
     }
+
+    public function get($id)
+    {
+        $sql = 'SELECT * FROM '.$this->_table.' WHERE '.$this->_key.' = ?';
+        $stmt = $this->prepare($sql);
+        $stmt->setFetchMode(PDO::FETCH_CLASS, 'Model_Result');
+        $stmt->execute(array($id));
+        return $stmt->fetch();
+    }
+}
+
+class Model_Result
+{
 }
