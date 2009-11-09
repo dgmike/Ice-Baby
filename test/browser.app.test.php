@@ -43,4 +43,9 @@ EOF;
         $this->assertEqual($return, $paginaDeErro, 'Retornou a página de erro padrão. %s');
     }
 
+    public function testMethodNotFound()
+    {
+        $return = $this->post(TEST_ICE_BASE_URL.'/home.php/post/23');
+        $this->assertText('501 - Method Not Found');
+    }
 }

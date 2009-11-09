@@ -21,6 +21,10 @@ class Error
 </html>
 EOF;
     }
+    public function __call($method, $args)
+    { 
+        $this->get();
+    }
 }
 
 } // CLASS EXISTS ERROR
