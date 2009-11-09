@@ -63,3 +63,18 @@ class Error
         print $this->error_code.' - '.$this->error_message;
     }
 }
+
+/* Creates a base database */
+function createDatabase()
+{
+    $file = dirname(__FILE__).DIRECTORY_SEPARATOR.'banco.db';
+    unlink($file);
+    $conn = new PDO('sqlite://'.$file);
+    $conn->query('CREATE TABLE user (
+        id_usuario INTEGER PRIMARY KEY,
+        nome TEXT,
+        idade INTEGER
+    )');
+    $conn->query("INSERT INTO user (nome, idade) VALUES ('Alice', 20)");
+    $conn->query("INSERT INTO user (nome, idade) VALUES ('Michael', 21)");
+}
