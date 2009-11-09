@@ -22,4 +22,14 @@ class ModelTest extends UnitTestCase
         $this->assertEqual('id_user', $user->_key, 
                 'A chave primaria foi definida. %s');
     }
+
+    public function testSimpleQuery()
+    {
+        $user = new User;
+        $result = $user->query('SELECT count(*) as C FROM user');
+        $this->assertEqual(get_class($result), 'PDOStatement', 
+            'Retornou um objeto de resultado de PDO');
+        $this->assertEqual(2, $result->fetchObject()->C,
+            'Deveria retornar dois. %s');
+    }
 }
