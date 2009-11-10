@@ -37,6 +37,15 @@ class Model extends PDO
         $stmt->execute(array($id));
         return $stmt->fetch();
     }
+
+    public function select()
+    {
+        $sql = 'SELECT * FROM '.$this->_table;
+        $stmt = $this->prepare($sql);
+        $stmt->setFetchMode(PDO::FETCH_CLASS, 'Model_Result');
+        return $stmt->execute();
+        
+    }
 }
 
 class Model_Result
