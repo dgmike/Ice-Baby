@@ -49,7 +49,10 @@ class ModelTest extends UnitTestCase
         $result = $user->select();
         $this->assertEqual(get_class($result), 'Model_Result',
             'O retorno do get é um Model_Result. %s');
-        $this->assertEqual(2, $result->count(),
-            'A consulta pegou dois itens. %s');
+        $this->assertEqual('Alice', $result->nome, 
+            'O nome da primeira pessoa deve ser Alice. %s');
+        $result->fetch();
+        $this->assertEqual('Michael', $result->nome, 
+            'O nome da segunda pessoa deve ser Michael. %s');
     }
 }

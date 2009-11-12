@@ -33,7 +33,7 @@ class Model extends PDO
     {
         $sql = 'SELECT * FROM '.$this->_table.' WHERE '.$this->_key.' = ?';
         $stmt = $this->prepare($sql);
-        $stmt->setFetchMode(PDO::FETCH_CLASS, 'Model_Result');
+        $stmt->setFetchMode(PDO::FETCH_CLASS, 'Model_Result', array($stmt));
         $stmt->execute(array($id));
         return $stmt->fetch();
     }
@@ -42,12 +42,46 @@ class Model extends PDO
     {
         $sql = 'SELECT * FROM '.$this->_table;
         $stmt = $this->prepare($sql);
-        $stmt->setFetchMode(PDO::FETCH_CLASS, 'Model_Result');
-        return $stmt->execute();
+        $stmt->setFetchMode(PDO::FETCH_CLASS, 'Model_Result', array($stmt));
+        $stmt->execute();
+        return $stmt->fetch();
         
     }
 }
 
 class Model_Result
 {
+    private $_stmt = null;
+    private $_data = array();
+
+    public function __construct($stmt)
+    {
+        $stmt->setFetchMode(PDO::FETCH_CLASS, 'Model_Result', array($stmt));
+        $this->_stmt = $stmt;
+    }
+
+    public function __set($key, $value)
+    {
+        $this->_data[$key] = $value;
+    }
+
+    public function __get($key)
+    {
+        return isset($this->_data[$key]) ? $this->_data[$key] : '';
+    }
+
+    public function __call($method, $args) 
+    {
+        $return = call_user_func_array(array($this->_stmt, $method), $args);
+        if ($return instanceof Model_Result) {
+            $this->_data = $return->data();
+        }
+        return $return;
+    }
+
+    public function data()
+    {
+        return $this->_data;
+    }
+
 }
