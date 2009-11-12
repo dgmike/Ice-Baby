@@ -55,4 +55,15 @@ class ModelTest extends UnitTestCase
         $this->assertEqual('Michael', $result->nome, 
             'O nome da segunda pessoa deve ser Michael. %s');
     }
+
+    public function testPDOStmFunctions()
+    {
+        $user = new User;
+        $result = $user->select();
+        $this->assertEqual('Alice', $result->nome,
+            'O primeiro usuario deve ser Alice. %s');
+        $returned = $result->fetch();
+        $this->assertEqual($result, $returned, 
+            'O result deve ser igual ao returned');
+    }
 }
