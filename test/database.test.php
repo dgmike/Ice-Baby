@@ -56,7 +56,7 @@ class ModelTest extends UnitTestCase
             'O nome da segunda pessoa deve ser Michael. %s');
     }
 
-    public function testPDOStmFunctions()
+    public function testResultEqualsReturnFetch()
     {
         $user = new User;
         $result = $user->select();
@@ -66,4 +66,6 @@ class ModelTest extends UnitTestCase
         $this->assertEqual($result, $returned, 
             'O result deve ser igual ao returned');
     }
+
+    public function 
 }
