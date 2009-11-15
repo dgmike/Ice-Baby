@@ -6,7 +6,7 @@ define('DB_DNS', 'sqlite://'
                 .dirname(__FILE__)
                 .DIRECTORY_SEPARATOR.'banco.db');
 
-class User extends Model {}
+class User extends Model { }
 
 class ModelTest extends UnitTestCase
 {
@@ -73,5 +73,18 @@ class ModelTest extends UnitTestCase
         $result = $user->select();
         $this->assertEqual(2, $result->rows(), 
             'O rows deve vir do PDOStatement, logo deve ser dois. %s');
+    }
+
+    public function testToString()
+    {
+        $user = new User;
+        $result = $user->get(1);
+        $this->assertEqual(1, $result->id_user, 
+            'O codigo do primeiro usuario. %s');
+        $this->assertEqual('Alice', $result->nome,
+            'O nome do primeiro usuario. %s');
+        $this->assertEqual('1', (string) $result, 
+            'O nome conforme definido em $str. %s');
+
     }
 }

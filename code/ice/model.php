@@ -3,6 +3,7 @@ class Model extends PDO
 {
     public $_table = null;
     public $_key = null;
+    public $str = null;
 
     public function __construct($dns=null, $username=null, $password=null,
             array $driver_options = array())
@@ -12,6 +13,9 @@ class Model extends PDO
         }
         if (!$this->_key) {
             $this->_key = 'id_'.$this->_table;
+        }
+        if (!$this->str) {
+            $this->str = ":id_{$this->_table}:";
         }
         $items = array('dns', 'username', 'password', 'driver_options');
         foreach ($items as $item) {
@@ -33,7 +37,7 @@ class Model extends PDO
     {
         $sql = 'SELECT * FROM '.$this->_table.' WHERE '.$this->_key.' = ?';
         $stmt = $this->prepare($sql);
-        $stmt->setFetchMode(PDO::FETCH_CLASS, 'Model_Result', array($stmt));
+        $stmt->setFetchMode(PDO::FETCH_CLASS, 'Model_Result', array($stmt, $this));
         $stmt->execute(array($id));
         return $stmt->fetch();
     }
@@ -42,7 +46,7 @@ class Model extends PDO
     {
         $sql = 'SELECT * FROM '.$this->_table;
         $stmt = $this->prepare($sql);
-        $stmt->setFetchMode(PDO::FETCH_CLASS, 'Model_Result', array($stmt));
+        $stmt->setFetchMode(PDO::FETCH_CLASS, 'Model_Result', array($stmt, $this));
         $stmt->execute();
         return $stmt->fetch();
         
@@ -52,12 +56,14 @@ class Model extends PDO
 class Model_Result
 {
     private $_stmt = null;
+    private $_model = null;
     private $_data = array();
 
-    public function __construct($stmt)
+    public function __construct($stmt, $model)
     {
-        $stmt->setFetchMode(PDO::FETCH_CLASS, 'Model_Result', array($stmt));
+        $stmt->setFetchMode(PDO::FETCH_CLASS, 'Model_Result', array($stmt, $model));
         $this->_stmt = $stmt;
+        $this->_model = $model;
     }
 
     public function __set($key, $value)
@@ -91,5 +97,16 @@ class Model_Result
         $r = $db->query($sql);
         $c = count($r->fetchAll());
         return $c;
+    }
+
+    public function __toString()
+    {
+        $string = $this->_model->str;
+        preg_match_all('@:\w+:@', $string, $matches);
+        foreach ($matches[0] as $item) {
+            $valor  = $this->_data[substr($item, 1, -1)];
+            $string = str_replace($item, $valor, $string);
+        }
+        return $string;
     }
 }
