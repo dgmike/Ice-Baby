@@ -137,4 +137,12 @@ class ModelTest extends UnitTestCase
         $users = $muser->select(array('id_user <=' => 3),
             'Escolhido menor-igual a três, logo três. %s');
     }
+
+    public function testSelectMultiSearch()
+    {
+        $muser = new User;
+        $users = $muser->select(array('id_user >' => 3, 'id_user <' => 5));
+        $this->assertEqual(1, $users->rows(),
+            'Entre três e cinco: um. %s');
+    }
 }
