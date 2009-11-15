@@ -104,4 +104,15 @@ class ModelTest extends UnitTestCase
         $this->assertEqual('1 - Alice', (string) $result, 
             'O nome conforme definido em $str. %s');
     }
+
+    public function testSelectSingleParams()
+    {
+        $muser = new User;
+        $users = $muser->select(array('nome' => 'Michael'));
+        $this->assertEqual(2, $users->id_user,
+            'Pode-se fazer filtros com array. %s');
+        $users = $muser->select(array('nome' => 'Alice'));
+        $this->assertEqual(1, $users->id_user,
+            'Pode-se fazer filtros com array. %s');
+    }
 }

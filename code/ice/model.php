@@ -42,14 +42,20 @@ class Model extends PDO
         return $stmt->fetch();
     }
 
-    public function select()
+    public function select($where=array())
     {
+        $_where = array();
+        foreach ($where as $key=>$value) {
+            $_where[] = "$key = '$value'";
+        }
         $sql = 'SELECT * FROM '.$this->_table;
+        if ($_where) {
+            $sql .= ' WHERE '.implode(' AND ', $_where);
+        }
         $stmt = $this->prepare($sql);
         $stmt->setFetchMode(PDO::FETCH_CLASS, 'Model_Result', array($stmt, $this));
         $stmt->execute();
         return $stmt->fetch();
-        
     }
 }
 
