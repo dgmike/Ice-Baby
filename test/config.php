@@ -77,4 +77,8 @@ function createDatabase()
     )');
     $conn->query("INSERT INTO user (nome, idade) VALUES ('Alice', 20)");
     $conn->query("INSERT INTO user (nome, idade) VALUES ('Michael', 21)");
+    $conn->query("INSERT INTO user (nome, idade) VALUES ('Rafael', 24)");
+    $conn->query("INSERT INTO user (nome, idade) VALUES ('Elcio', 26)");
+    $conn->query("INSERT INTO user (nome, idade) VALUES ('Diego', 21)");
+    $conn->query("INSERT INTO user (nome, idade) VALUES ('Julio', 18)");
 }

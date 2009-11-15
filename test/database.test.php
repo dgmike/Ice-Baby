@@ -29,8 +29,8 @@ class ModelTest extends UnitTestCase
         $result = $user->query('SELECT count(*) as C FROM user');
         $this->assertEqual(get_class($result), 'PDOStatement', 
             'Retornou um objeto de resultado de PDO');
-        $this->assertEqual(2, $result->fetchObject()->C,
-            'Deveria retornar dois. %s');
+        $this->assertEqual(6, $result->fetchObject()->C,
+            'Deveria retornar seis. %s');
     }
 
     public function testGet()
@@ -71,8 +71,8 @@ class ModelTest extends UnitTestCase
     {
         $user = new User;
         $result = $user->select();
-        $this->assertEqual(2, $result->rows(), 
-            'O rows deve vir do PDOStatement, logo deve ser dois. %s');
+        $this->assertEqual(6, $result->rows(), 
+            'O rows deve vir do PDOStatement, logo deve ser seis. %s');
     }
 
     public function testToString()

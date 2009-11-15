@@ -1,4 +1,6 @@
 <?php
+require_once 'model_result.php';
+
 class Model extends PDO
 {
     public $_table = null;
@@ -58,4 +60,3 @@ class Model extends PDO
         return $stmt->fetch();
     }
 }
-
