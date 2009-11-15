@@ -67,5 +67,11 @@ class ModelTest extends UnitTestCase
             'O result deve ser igual ao returned');
     }
 
-    public function 
+    public function testCount()
+    {
+        $user = new User;
+        $result = $user->select();
+        $this->assertEqual(2, $result->rows(), 
+            'O rows deve vir do PDOStatement, logo deve ser dois. %s');
+    }
 }

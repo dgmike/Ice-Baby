@@ -84,4 +84,12 @@ class Model_Result
         return $this->_data;
     }
 
+    public function rows()
+    {
+        $sql = $this->_stmt->queryString;
+        $db = new Model;
+        $r = $db->query($sql);
+        $c = count($r->fetchAll());
+        return $c;
+    }
 }
