@@ -109,4 +109,9 @@ class Model_Result
         }
         return $string;
     }
+
+    public function setStr($string)
+    {
+        $this->_model->str = $string;
+    }
 }

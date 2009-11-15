@@ -85,6 +85,23 @@ class ModelTest extends UnitTestCase
             'O nome do primeiro usuario. %s');
         $this->assertEqual('1', (string) $result, 
             'O nome conforme definido em $str. %s');
+    }
 
+    public function testSetString()
+    {
+        $user = new User;
+        $result = $user->get(1);
+        $this->assertEqual(1, $result->id_user, 
+            'O codigo do primeiro usuario. %s');
+        $this->assertEqual('Alice', $result->nome,
+            'O nome do primeiro usuario. %s');
+        $this->assertEqual('1', (string) $result, 
+            'O nome conforme definido em $str. %s');
+        $result->str = ':id_user: - :nome:';
+        $this->assertEqual('1', (string) $result, 
+            'O nome conforme definido em $str. %s');
+        $result->setStr(':id_user: - :nome:');
+        $this->assertEqual('1 - Alice', (string) $result, 
+            'O nome conforme definido em $str. %s');
     }
 }
