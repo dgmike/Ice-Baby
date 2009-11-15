@@ -145,4 +145,20 @@ class ModelTest extends UnitTestCase
         $this->assertEqual(1, $users->rows(),
             'Entre três e cinco: um. %s');
     }
+
+    public function testAndOr()
+    {
+        $muser = new User;
+        $users = $muser->select(array('id_user =' => 2, 'OR id_user =' => 5));
+        $this->assertEqual(2, $users->rows(),
+            'Apenas os que desejamos: dois. %s');
+    }
+
+    public function testWhereString()
+    {
+        $muser = new User;
+        $users = $muser->select("nome = 'Michael'");
+        $this->assertEqual(1, $users->rows(),
+            'Apenas os que desejamos: Michael. %s');
+    }
 }

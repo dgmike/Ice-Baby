@@ -47,15 +47,23 @@ class Model extends PDO
     public function select($where=array())
     {
         $_where = array();
-        foreach ($where as $key=>$value) {
-            if (strpos(trim($key), ' ')===false) {
-                $key .= ' = ';
+        if ('string'==gettype($where)) {
+            $_where[] = $where;
+        } elseif (in_array(gettype($where), array('array', 'object'))) {
+            foreach ($where as $key=>$value) {
+                $key = trim($key);
+                if (strpos(trim($key), ' ')===false) {
+                    $key .= ' = ';
+                }
+                if ($_where AND !preg_match('@^(and|or)\b@i', $key)) {
+                    $key = "AND $key";
+                }
+                $_where[] = "$key '$value'";
             }
-            $_where[] = "$key '$value'";
         }
         $sql = 'SELECT * FROM '.$this->_table;
         if ($_where) {
-            $sql .= ' WHERE '.implode(' AND ', $_where);
+            $sql .= ' WHERE '.implode(' ', $_where);
         }
         $stmt = $this->prepare($sql);
         $stmt->setFetchMode(PDO::FETCH_CLASS, 'Model_Result', array($stmt, $this));
