@@ -48,7 +48,10 @@ class Model extends PDO
     {
         $_where = array();
         foreach ($where as $key=>$value) {
-            $_where[] = "$key = '$value'";
+            if (strpos(trim($key), ' ')===false) {
+                $key .= ' = ';
+            }
+            $_where[] = "$key '$value'";
         }
         $sql = 'SELECT * FROM '.$this->_table;
         if ($_where) {

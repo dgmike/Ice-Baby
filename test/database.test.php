@@ -115,4 +115,26 @@ class ModelTest extends UnitTestCase
         $this->assertEqual(1, $users->id_user,
             'Pode-se fazer filtros com array. %s');
     }
+
+    public function testSelectDiferent()
+    {
+        $muser = new User;
+        $users = $muser->select(array('nome !=' => 'Alice'));
+        $this->assertEqual(5, $users->rows(),
+            'Fizemos um diferente, logo deve ser cinco. %s');
+    }
+
+    public function testSelectMinor()
+    {
+        $muser = new User;
+        $users = $muser->select(array('id_user <' => 3),
+            'Escolhido menor que três, logo dois. %s');
+    }
+
+    public function testSelectMinorEqual()
+    {
+        $muser = new User;
+        $users = $muser->select(array('id_user <=' => 3),
+            'Escolhido menor-igual a três, logo três. %s');
+    }
 }
