@@ -127,14 +127,16 @@ class ModelTest extends UnitTestCase
     public function testSelectMinor()
     {
         $muser = new User;
-        $users = $muser->select(array('id_user <' => 3),
+        $users = $muser->select(array('id_user <' => 3));
+        $this->assertEqual(2, $users->rows(),
             'Escolhido menor que três, logo dois. %s');
     }
 
     public function testSelectMinorEqual()
     {
         $muser = new User;
-        $users = $muser->select(array('id_user <=' => 3),
+        $users = $muser->select(array('id_user <=' => 3));
+        $this->assertEqual(3, $users->rows(),
             'Escolhido menor-igual a três, logo três. %s');
     }
 
@@ -160,5 +162,17 @@ class ModelTest extends UnitTestCase
         $users = $muser->select("nome = 'Michael'");
         $this->assertEqual(1, $users->rows(),
             'Apenas os que desejamos: Michael. %s');
+    }
+
+    public function testSelectField()
+    {
+        $muser = new User;
+        $users = $muser->select(array('id_user <' => 4), 'count(*) as c');
+        $this->assertEqual(3, $users->c, 
+            'Pode-se passar, como segundo parametro, os fields que pretende'
+            .'pegar. %s');
+        $users = $muser->select(null, array('max(idade) i', 'nome', 'idade'));
+        $this->assertEqual(26, $users->i, 
+            'Pode-se passar um array de fields. %s');
     }
 }

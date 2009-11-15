@@ -44,7 +44,7 @@ class Model extends PDO
         return $stmt->fetch();
     }
 
-    public function select($where=array())
+    public function select($where=array(), $fields='*')
     {
         $_where = array();
         if ('string'==gettype($where)) {
@@ -61,7 +61,13 @@ class Model extends PDO
                 $_where[] = "$key '$value'";
             }
         }
-        $sql = 'SELECT * FROM '.$this->_table;
+        if (!$fields) {
+            $fields = '*';
+        }
+        if (in_array(gettype($fields), array('object', 'array'))) {
+            $fields = implode(', ', (array) $fields);
+        }
+        $sql = 'SELECT '.$fields.' FROM '.$this->_table;
         if ($_where) {
             $sql .= ' WHERE '.implode(' ', $_where);
         }
