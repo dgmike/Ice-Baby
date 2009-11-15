@@ -81,4 +81,24 @@ function createDatabase()
     $conn->query("INSERT INTO user (nome, idade) VALUES ('Elcio', 26)");
     $conn->query("INSERT INTO user (nome, idade) VALUES ('Diego', 21)");
     $conn->query("INSERT INTO user (nome, idade) VALUES ('Julio', 18)");
+
+    $conn->query('CREATE TABLE telephone (
+        id_telephone INTEGER PRIMARY KEY,
+        id_user INTEGER,
+        number TEXT
+    )');
+
+    $conn->query("INSERT INTO user (id_user, numero) VALUES (1, '555-3869')");
+    $conn->query("INSERT INTO user (id_user, numero) VALUES (1, '555-7845')");
+    $conn->query("INSERT INTO user (id_user, numero) VALUES (1, '555-2346')");
+    $conn->query("INSERT INTO user (id_user, numero) VALUES (1, '555-4876')");
+    $conn->query("INSERT INTO user (id_user, numero) VALUES (2, '555-4200')");
+    $conn->query("INSERT INTO user (id_user, numero) VALUES (2, '555-1983')");
+    $conn->query("INSERT INTO user (id_user, numero) VALUES (3, '555-1983')");
+    $conn->query("INSERT INTO user (id_user, numero) VALUES (4, '555-6165')");
+    $conn->query("INSERT INTO user (id_user, numero) VALUES (4, '555-4613')");
+    $conn->query("INSERT INTO user (id_user, numero) VALUES (5, '555-1452')");
+    $conn->query("INSERT INTO user (id_user, numero) VALUES (5, '555-1876')");
+    $conn->query("INSERT INTO user (id_user, numero) VALUES (5, '555-0125')");
+    $conn->query("INSERT INTO user (id_user, numero) VALUES (6, '555-0012')");
 }
