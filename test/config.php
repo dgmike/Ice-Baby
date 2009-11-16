@@ -88,17 +88,30 @@ function createDatabase()
         number TEXT
     )');
 
-    $conn->query("INSERT INTO user (id_user, numero) VALUES (1, '555-3869')");
-    $conn->query("INSERT INTO user (id_user, numero) VALUES (1, '555-7845')");
-    $conn->query("INSERT INTO user (id_user, numero) VALUES (1, '555-2346')");
-    $conn->query("INSERT INTO user (id_user, numero) VALUES (1, '555-4876')");
-    $conn->query("INSERT INTO user (id_user, numero) VALUES (2, '555-4200')");
-    $conn->query("INSERT INTO user (id_user, numero) VALUES (2, '555-1983')");
-    $conn->query("INSERT INTO user (id_user, numero) VALUES (3, '555-1983')");
-    $conn->query("INSERT INTO user (id_user, numero) VALUES (4, '555-6165')");
-    $conn->query("INSERT INTO user (id_user, numero) VALUES (4, '555-4613')");
-    $conn->query("INSERT INTO user (id_user, numero) VALUES (5, '555-1452')");
-    $conn->query("INSERT INTO user (id_user, numero) VALUES (5, '555-1876')");
-    $conn->query("INSERT INTO user (id_user, numero) VALUES (5, '555-0125')");
-    $conn->query("INSERT INTO user (id_user, numero) VALUES (6, '555-0012')");
+    $conn->query("INSERT INTO telephone (id_user, number) 
+                    VALUES (1, '555-3869')");
+    $conn->query("INSERT INTO telephone (id_user, number) 
+                    VALUES (1, '555-7845')");
+    $conn->query("INSERT INTO telephone (id_user, number) 
+                    VALUES (1, '555-2346')");
+    $conn->query("INSERT INTO telephone (id_user, number) 
+                    VALUES (1, '555-4876')");
+    $conn->query("INSERT INTO telephone (id_user, number) 
+                    VALUES (2, '555-4200')");
+    $conn->query("INSERT INTO telephone (id_user, number) 
+                    VALUES (2, '555-1983')");
+    $conn->query("INSERT INTO telephone (id_user, number) 
+                    VALUES (3, '555-1983')");
+    $conn->query("INSERT INTO telephone (id_user, number) 
+                    VALUES (4, '555-6165')");
+    $conn->query("INSERT INTO telephone (id_user, number) 
+                    VALUES (4, '555-4613')");
+    $conn->query("INSERT INTO telephone (id_user, number) 
+                    VALUES (5, '555-1452')");
+    $conn->query("INSERT INTO telephone (id_user, number) 
+                    VALUES (5, '555-1876')");
+    $conn->query("INSERT INTO telephone (id_user, number) 
+                    VALUES (5, '555-0125')");
+    $conn->query("INSERT INTO telephone (id_user, number) 
+                    VALUES (6, '555-0012')");
 }

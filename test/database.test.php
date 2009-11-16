@@ -6,7 +6,12 @@ define('DB_DNS', 'sqlite://'
                 .dirname(__FILE__)
                 .DIRECTORY_SEPARATOR.'banco.db');
 
-class User extends Model { }
+class User extends Model { 
+    var $hasMany = array('telephone');
+}
+
+class Telephone extends Model { 
+}
 
 class ModelTest extends UnitTestCase
 {
@@ -174,5 +179,15 @@ class ModelTest extends UnitTestCase
         $users = $muser->select(null, array('max(idade) i', 'nome', 'idade'));
         $this->assertEqual(26, $users->i, 
             'Pode-se passar um array de fields. %s');
+    }
+
+    public function testSubElement()
+    {
+        $muser = new User;
+        $user = $muser->get(1);
+        $this->assertEqual('Alice', $user->nome,
+            'O nome do usuário vindo do banco de dados. %s');
+        $this->assertEqual('Model_Result', get_class($user->telephone),
+            'O que deveria ter em telephone não é um model_result? %s');
     }
 }

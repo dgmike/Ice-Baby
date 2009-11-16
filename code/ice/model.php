@@ -6,6 +6,7 @@ class Model extends PDO
     public $_table = null;
     public $_key = null;
     public $str = null;
+    public $hasMany = array();
 
     public function __construct($dns=null, $username=null, $password=null,
             array $driver_options = array())

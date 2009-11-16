@@ -11,6 +11,14 @@ class Model_Result
         $stmt->setFetchMode(PDO::FETCH_CLASS, 'Model_Result', array($stmt, $model));
         $this->_stmt = $stmt;
         $this->_model = $model;
+        foreach ($model->hasMany as $item) {
+            $i = ucfirst($item);
+            $o = new $i;
+            $where = array(
+                $model->_key => $this->_data[$model->_key]
+            );
+            $this->_data[$item] = $o->select($where);
+        }
     }
 
     public function __set($key, $value)
