@@ -254,11 +254,10 @@ class ModelTest extends UnitTestCase
         $muser = new User;
         $users = $muser->select(null, 'nome, idade', 2);
         $this->assertEqual(
+            $users->tableRows(),
             "<tr><td>Alice</td><td>20</td></tr>\n".
-            "<tr><td>Michael</td><td>21</td></tr>"
-            , $users->tableRows(),
+            "<tr><td>Michael</td><td>21</td></tr>",
             'Todas as linhas da tabela gerada. %s'
         );
     }
-
 }
