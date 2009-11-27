@@ -238,4 +238,27 @@ class ModelTest extends UnitTestCase
         $this->assertEqual(2, $users->pages(),
             'A quantidade de páginas: 2. %s');
     }
+
+    public function testTableRow()
+    {
+        $muser = new User;
+        $users = $muser->select(null, 'nome, idade', 2);
+        $this->assertEqual(
+            '<tr><td>Alice</td><td>20</td></tr>', $users->tableRow(),
+            'A linha do resultado obtido. %s'
+        );
+    }
+
+    public function testTableRows()
+    {
+        $muser = new User;
+        $users = $muser->select(null, 'nome, idade', 2);
+        $this->assertEqual(
+            "<tr><td>Alice</td><td>20</td></tr>\n".
+            "<tr><td>Michael</td><td>21</td></tr>"
+            , $users->tableRows(),
+            'Todas as linhas da tabela gerada. %s'
+        );
+    }
+
 }

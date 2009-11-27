@@ -78,4 +78,20 @@ class Model_Result
         }
         return $this->_pages;
     }
+
+    public function tableRow()
+    {
+        $data = $this->data();
+        $data = array_diff_key($data, array_fill_keys($this->_model->hasMany, true));
+        return '<tr><td>'.implode('</td><td>', $data).'</td></tr>';
+    }
+
+    public function tableRows() 
+    {
+        $table = array();
+        do {
+            $table[] = $this->tableRow();
+        } while ($this->fetch());
+        return implode("\n", $table);
+    }
 }
