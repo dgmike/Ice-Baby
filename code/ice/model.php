@@ -45,7 +45,7 @@ class Model extends PDO
         return $stmt->fetch();
     }
 
-    public function select($where=array(), $fields='*')
+    public function select($where=array(), $fields='*', $limit=null, $offset=null)
     {
         $_where = array();
         if ('string'==gettype($where)) {
@@ -72,9 +72,27 @@ class Model extends PDO
         if ($_where) {
             $sql .= ' WHERE '.implode(' ', $_where);
         }
+        if ($offset) {
+            $offset = (int) $offset;
+        }
+        if ($limit) {
+            $limit = (int) $limit;
+        }
+        if ($limit AND $offset) {
+            $offset .= ',';
+        }
+        if ($offset OR $limit) {
+            $sql .= " LIMIT $offset$limit";
+        }
         $stmt = $this->prepare($sql);
         $stmt->setFetchMode(PDO::FETCH_CLASS, 'Model_Result', array($stmt, $this));
         $stmt->execute();
         return $stmt->fetch();
+    }
+
+    public function page($fields = '*', $page = 1, $filter = null, $per_page = 20)
+    {
+        $limit = $per_page;
+        return $this->select($filter, $fields, $limit, $offset);
     }
 }

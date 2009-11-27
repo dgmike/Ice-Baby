@@ -190,4 +190,35 @@ class ModelTest extends UnitTestCase
         $this->assertEqual('Model_Result', get_class($user->telephone),
             'O que deveria ter em telephone não é um model_result? %s');
     }
+
+    public function testSelectLimit()
+    {
+        $muser = new User;
+        $users = $muser->select(null, '*', 3);
+        $this->assertEqual(3, $users->rows(),
+            'A quantidade passando pelo limit. %s');
+    }
+
+    public function testSelectLimitOffset()
+    {
+        $muser = new User;
+        $users = $muser->select(null, '*', 3, 2);
+        $this->assertEqual(3, $users->rows(),
+            'A quantidade passando pelo limit. %s');
+        $this->assertEqual('Rafael', $users->nome,
+            'O primeiro escolhido é o Elcio devido ao offset. %s');
+    }
+
+    public function testPage()
+    {
+        $muser = new User;
+        $users = $muser->page($fields   = 'nome', 
+                              $page     = 1, 
+                              $filter   = null, 
+                              $per_page = 4);
+        $this->assertEqual('Model_Result', get_class($users),
+            'O que deveria ser um model_result? %s');
+        $this->assertEqual(4, $users->rows(),
+            'Deveria volta a quantidade máxima de resultados.');
+    }
 }
