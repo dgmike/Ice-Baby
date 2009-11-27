@@ -94,11 +94,11 @@ class Model_Result
         return "<tr>$before<td>".implode('</td><td>', $data)."</td>$after</tr>";
     }
 
-    public function tableRows() 
+    public function tableRows($before=null, $after = null, array $fields = array())
     {
         $table = array();
         do {
-            $table[] = $this->tableRow();
+            $table[] = $this->tableRow($before, $after, $fields);
         } while ($this->fetch());
         return implode("\n", $table);
     }

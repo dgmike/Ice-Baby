@@ -291,4 +291,20 @@ class ModelTest extends UnitTestCase
             'Todas as linhas da tabela gerada. %s'
         );
     }
+
+    public function testTableRowsAfterBeforeAndFields()
+    {
+        $muser = new User;
+        $users = $muser->select(null, '*', 2);
+        $this->assertEqual(
+            $users->tableRows(
+                "<td>#:id_user:</td>",
+                "<td><a href='#:id_user:'>editar</a></td>",
+                array('nome')
+            ),
+            "<tr><td>#1</td><td>Alice</td><td><a href='#1'>editar</a></td></tr>\n".
+            "<tr><td>#2</td><td>Michael</td><td><a href='#2'>editar</a></td></tr>",
+            'Todas as linhas da tabela gerada. %s'
+        );
+    }
 }
