@@ -94,10 +94,16 @@ class Model extends PDO
     {
         $offset = ($page-1) * $per_page;
         $limit  = $per_page;
-        $total  = $this->select($filter, 'count(*) as C')->C;
-        $pages  = ceil($total/$per_page);
+        $total  = $this->select($filter, 'count(*) as C');
+        if ($total) {
+            $pages  = ceil($total->C/$per_page);
+        } else {
+            $pages = 0;
+        }
         $return = $this->select($filter, $fields, $limit, $offset);
-        $return->pages($pages);
+        if ($return) {
+            $return->pages($pages);
+        }
         return $return;
     }
 }
