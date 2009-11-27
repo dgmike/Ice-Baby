@@ -70,4 +70,12 @@ class Model_Result
     {
         $this->_model->str = $string;
     }
+
+    public function pages($pages=null)
+    {
+        if ($pages) {
+            $this->_pages = $pages;
+        }
+        return $this->_pages;
+    }
 }

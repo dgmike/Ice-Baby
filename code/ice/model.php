@@ -72,16 +72,16 @@ class Model extends PDO
         if ($_where) {
             $sql .= ' WHERE '.implode(' ', $_where);
         }
-        if ($offset) {
+        if (!is_null($offset)) {
             $offset = (int) $offset;
         }
-        if ($limit) {
+        if (!is_null($limit)) {
             $limit = (int) $limit;
         }
-        if ($limit AND $offset) {
+        if (!is_null($limit) AND !is_null($offset)) {
             $offset .= ',';
         }
-        if ($offset OR $limit) {
+        if (!is_null($offset) OR !is_null($limit)) {
             $sql .= " LIMIT $offset$limit";
         }
         $stmt = $this->prepare($sql);
@@ -92,8 +92,12 @@ class Model extends PDO
 
     public function page($fields = '*', $page = 1, $filter = null, $per_page = 20)
     {
-        $limit = $per_page;
         $offset = ($page-1) * $per_page;
-        return $this->select($filter, $fields, $limit, $offset);
+        $limit  = $per_page;
+        $total  = $this->select($filter, 'count(*) as C')->C;
+        $pages  = ceil($total/$per_page);
+        $return = $this->select($filter, $fields, $limit, $offset);
+        $return->pages($pages);
+        return $return;
     }
 }

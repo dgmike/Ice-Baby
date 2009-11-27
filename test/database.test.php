@@ -222,6 +222,8 @@ class ModelTest extends UnitTestCase
             'Deveria voltar a quantidade máxima de resultados. %s');
         $this->assertEqual('Alice', $users->nome,
             'O primeiro escolhido é Alice. %s');
+        $this->assertEqual(2, $users->pages(),
+            'A quantidade de páginas: 2. %s');
         // Página dois
         $users = $muser->page($fields   = 'nome', 
                               $page     = 2, 
@@ -233,5 +235,7 @@ class ModelTest extends UnitTestCase
             'Deveria voltar a quantidade máxima de resultados. %s');
         $this->assertEqual('Diego', $users->nome,
             'O primeiro escolhido é Diego. %s');
+        $this->assertEqual(2, $users->pages(),
+            'A quantidade de páginas: 2. %s');
     }
 }
