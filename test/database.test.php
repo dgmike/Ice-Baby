@@ -219,6 +219,19 @@ class ModelTest extends UnitTestCase
         $this->assertEqual('Model_Result', get_class($users),
             'O que deveria ser um model_result? %s');
         $this->assertEqual(4, $users->rows(),
-            'Deveria volta a quantidade máxima de resultados.');
+            'Deveria voltar a quantidade máxima de resultados. %s');
+        $this->assertEqual('Alice', $users->nome,
+            'O primeiro escolhido é Alice. %s');
+        // Página dois
+        $users = $muser->page($fields   = 'nome', 
+                              $page     = 2, 
+                              $filter   = null, 
+                              $per_page = 4);
+        $this->assertEqual('Model_Result', get_class($users),
+            'O que deveria ser um model_result? %s');
+        $this->assertEqual(2, $users->rows(),
+            'Deveria voltar a quantidade máxima de resultados. %s');
+        $this->assertEqual('Diego', $users->nome,
+            'O primeiro escolhido é Diego. %s');
     }
 }

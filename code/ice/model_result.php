@@ -5,6 +5,7 @@ class Model_Result
     private $_stmt = null;
     private $_model = null;
     private $_data = array();
+    private $_pages = null;
 
     public function __construct($stmt, $model)
     {

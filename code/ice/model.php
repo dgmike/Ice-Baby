@@ -93,6 +93,7 @@ class Model extends PDO
     public function page($fields = '*', $page = 1, $filter = null, $per_page = 20)
     {
         $limit = $per_page;
+        $offset = ($page-1) * $per_page;
         return $this->select($filter, $fields, $limit, $offset);
     }
 }
