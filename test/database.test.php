@@ -249,20 +249,33 @@ class ModelTest extends UnitTestCase
         );
     }
 
+    public function testTableRowShowmeWhatINeed()
+    {
+        $muser = new User;
+        $users = $muser->select(null, '*', 2);
+        $this->assertEqual(
+            '<tr><td>Alice</td></tr>', 
+            $users->tableRow(null, null, array('nome')),
+            'A linha do resultado obtido. %s'
+        );
+    }
+
     public function testTableRowBeforeAfter()
     {
         $muser = new User;
         $users = $muser->select(null, 'nome, idade', 2);
         $this->assertEqual(
             $users->tableRow('<td><a href="?nome=:nome:">Editar</a></td>'),
-            '<tr><td><a href="?nome=Alice">Editar</a></td><td>Alice</td><td>20</td></tr>', 
+            '<tr><td><a href="?nome=Alice">Editar</a></td>'.
+            '<td>Alice</td><td>20</td></tr>', 
             'A linha do resultado obtido. %s'
         );
         $muser = new User;
         $users = $muser->select(null, 'nome, idade', 2);
         $this->assertEqual(
-            $users->tableRow(null, '<td><a href="?nome=:nome:">Editar</a></td>'),
-            '<tr><td>Alice</td><td>20</td><td><a href="?nome=Alice">Editar</a></td></tr>', 
+            $users->tableRow(null,'<td><a href="?nome=:nome:">Editar</a></td>'),
+            '<tr><td>Alice</td><td>20</td>'.
+            '<td><a href="?nome=Alice">Editar</a></td></tr>', 
             'A linha do resultado obtido. %s'
         );
     }

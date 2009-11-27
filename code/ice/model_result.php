@@ -79,10 +79,13 @@ class Model_Result
         return $this->_pages;
     }
 
-    public function tableRow($before=null, $after = null)
+    public function tableRow($before=null, $after = null, array $fields = array())
     {
         $data = $this->data();
         $data = array_diff_key($data, array_fill_keys($this->_model->hasMany, true));
+        if ($fields) {
+            $data = array_intersect_key($data, array_fill_keys($fields, true));
+        }
         foreach(array('before', 'after') as $item) {
             foreach ($this->data() as $key=>$value) {
                 $$item = str_replace(":{$key}:", $value, $$item);
