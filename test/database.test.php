@@ -206,7 +206,7 @@ class ModelTest extends UnitTestCase
         $this->assertEqual(3, $users->rows(),
             'A quantidade passando pelo limit. %s');
         $this->assertEqual('Rafael', $users->nome,
-            'O primeiro escolhido é o Elcio devido ao offset. %s');
+            'O primeiro escolhido é o Rafael devido ao offset. %s');
     }
 
     public function testPage()
