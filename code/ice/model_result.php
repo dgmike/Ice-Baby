@@ -79,11 +79,16 @@ class Model_Result
         return $this->_pages;
     }
 
-    public function tableRow()
+    public function tableRow($before=null, $after = null)
     {
         $data = $this->data();
         $data = array_diff_key($data, array_fill_keys($this->_model->hasMany, true));
-        return '<tr><td>'.implode('</td><td>', $data).'</td></tr>';
+        foreach(array('before', 'after') as $item) {
+            foreach ($this->data() as $key=>$value) {
+                $$item = str_replace(":{$key}:", $value, $$item);
+            }
+        }
+        return "<tr>$before<td>".implode('</td><td>', $data)."</td>$after</tr>";
     }
 
     public function tableRows() 

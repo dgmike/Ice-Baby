@@ -249,6 +249,24 @@ class ModelTest extends UnitTestCase
         );
     }
 
+    public function testTableRowBeforeAfter()
+    {
+        $muser = new User;
+        $users = $muser->select(null, 'nome, idade', 2);
+        $this->assertEqual(
+            $users->tableRow('<td><a href="?nome=:nome:">Editar</a></td>'),
+            '<tr><td><a href="?nome=Alice">Editar</a></td><td>Alice</td><td>20</td></tr>', 
+            'A linha do resultado obtido. %s'
+        );
+        $muser = new User;
+        $users = $muser->select(null, 'nome, idade', 2);
+        $this->assertEqual(
+            $users->tableRow(null, '<td><a href="?nome=:nome:">Editar</a></td>'),
+            '<tr><td>Alice</td><td>20</td><td><a href="?nome=Alice">Editar</a></td></tr>', 
+            'A linha do resultado obtido. %s'
+        );
+    }
+
     public function testTableRows()
     {
         $muser = new User;
