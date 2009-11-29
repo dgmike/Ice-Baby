@@ -307,4 +307,29 @@ class ModelTest extends UnitTestCase
             'Todas as linhas da tabela gerada. %s'
         );
     }
+
+    public function testTableRowsEmptyFields()
+    {
+        $muser = new User;
+
+        $users = $muser->select(null, 'id_user, nome', 2);
+        $this->assertEqual(
+            $users->tableRows("<td>#:id_user:</td>", null, null),
+
+            "<tr><td>#1</td><td>1</td><td>Alice</td></tr>\n".
+            "<tr><td>#2</td><td>2</td><td>Michael</td></tr>",
+
+            "Gerou as linhas com os dados completos. %s"
+        );
+
+        $users = $muser->select(null, 'id_user, nome', 2);
+        $this->assertEqual(
+            $users->tableRows("<td>#:id_user:</td>", null, array()),
+
+            "<tr><td>#1</td></tr>\n".
+            "<tr><td>#2</td></tr>",
+
+            "Gerou as linhas com os dados completos. %s"
+        );
+    }
 }
