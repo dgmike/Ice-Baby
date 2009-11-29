@@ -106,4 +106,24 @@ class Model extends PDO
         }
         return $return;
     }
+
+    public function insert($data = array(), $table = null)
+    {
+        $sql   = 'INSERT INTO %s (%s) VALUES (%s)';
+        $data  = (array) $data;
+        if (null === $table) {
+            $table = $this->_table;
+        }
+        $keys = array_keys($data);
+        $vals = array_values($data);
+        $vls  = array_fill(0, count($keys), '?');
+        list($keys, $vls) = array(implode(', ', $keys), implode(', ', $vls));
+        $sql  = sprintf($sql, $table, $keys, $vls);
+        $stmt = $this->prepare($sql);
+        $stmt->execute($vals);
+    }
+
+    public function save($data = array(), $table = null)
+    {
+    }
 }

@@ -332,4 +332,33 @@ class ModelTest extends UnitTestCase
             "Gerou as linhas com os dados completos. %s"
         );
     }
+
+    public function testInsert()
+    {
+        $model = new Model;
+        $muser = new User;
+        $total = $muser->select(null, 'COUNT(*) as C')->C;
+        $this->assertEqual(6, (int) $total,
+            'Quantidade defult de usuarios. %s'
+        );
+        $muser->insert(array(
+            'nome'  => 'Ricardo',
+            'idade' => '29',
+        ));
+
+        $total = $muser->select(null, 'COUNT(*) as C')->C;
+        $this->assertEqual(7, (int) $total,
+            'Adicionou mais um usuário. %s'
+        );
+        $data = $muser->get(7)->data();
+        unset($data['telephone']);
+        $this->assertEqual($data,
+            array(
+                'id_user' => '7',
+                'nome' => 'Ricardo',
+                'idade' => '29',
+            ),
+            'Retornou o objeto inserido. %s'
+        );
+    }
 }
