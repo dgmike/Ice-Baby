@@ -2,10 +2,11 @@
 
 class Model_Result
 {
-    private $_stmt = null;
-    private $_model = null;
-    private $_data = array();
-    private $_pages = null;
+    private $_stmt    = null;
+    private $_model   = null;
+    private $_data    = array();
+    private $_pages   = null;
+    private $_altated = false;
 
     public function __construct($stmt, $model)
     {
@@ -25,6 +26,9 @@ class Model_Result
 
     public function __set($key, $value)
     {
+        if ($this->_model) {
+            $this->_altated = true;
+        }
         $this->_data[$key] = $value;
     }
 
@@ -109,12 +113,18 @@ class Model_Result
         return implode("\n", $table);
     }
 
+    public function save()
+    {
+        $data = $this->_data;
+        $keys = array_fill_keys($this->_model->hasMany, true);
+        $data = array_diff_key($data, $keys);
+        return $this->_model->save($data);
+    }
 
-    # public function save()
-    # {
-    #     $data = $this->_data;
-    #     $keys = array_fill_keys($this->_model->hasMany, true);
-    #     $data = array_diff_key($data, $keys);
-    #     return $this->_model->save($data);
-    # }
+    public function __destruct()
+    {
+        if ($this->_altated) {
+            $this->save();
+        }
+    }
 }

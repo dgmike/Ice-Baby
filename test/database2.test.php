@@ -254,4 +254,32 @@ class Database2Test extends UnitTestCase
             'idade'   => '20',
         ), $data, 'O usuário que acaba de ser inserido. %s');
     }
+
+    public function testSaveAlterned()
+    {
+        $muser = new User;
+        $user  = $muser->get(1);
+        $this->assertEqual('Alice', $user->nome,
+            'O nome do primeiro usuario. %s');
+        $user->nome = 'Carlos';
+        $user->save();
+
+        $user  = $muser->get(1);
+        $this->assertEqual('Carlos', $user->nome,
+            'O nome do primeiro usuario apos o save. %s');
+    }
+
+    public function testSaveUnset()
+    {
+        $muser = new User;
+        $user  = $muser->get(1);
+        $this->assertEqual('Alice', $user->nome,
+            'O nome do primeiro usuario. %s');
+        $user->nome = 'Carlos';
+        unset($user);
+
+        $user  = $muser->get(1);
+        $this->assertEqual('Carlos', $user->nome,
+            'O nome do primeiro usuario apos o save. %s');
+    }
 }
