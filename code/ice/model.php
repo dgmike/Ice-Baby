@@ -158,4 +158,13 @@ class Model
         $stmt  = self::$_pdo->prepare($sql);
         $stmt->execute(array_values($data));
     }
+
+    public function save($data, array $where = array(), $table = null)
+    {
+        if (isset($data[$this->_key])) {
+            $this->update($data, $where, $table);
+        } else {
+            $this->insert($data, $table);
+        }
+    }
 }

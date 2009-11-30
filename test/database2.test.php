@@ -222,4 +222,36 @@ class Database2Test extends UnitTestCase
         $user  = $muser->get(1);
         $this->assertEqual('Elias', $user->nome, 'Nome da primeira pessoa. %s');
     }
+
+    public function testSave()
+    {
+        $muser = new User;
+        $this->assertEqual(6, $muser->select(null, 'count(*) as C')->C,
+            'Total de usuarios é 6. %s');
+        $this->assertEqual('Michael',
+            $muser->get(2)->nome,
+            'O segundo usuário se chama Michael. %s'
+        );
+        $muser->save(array(
+            'id_user' => '2',
+            'nome'    => 'Alex de Azevedo',
+        ));
+        $this->assertEqual('Alex de Azevedo',
+            $muser->get(2)->nome,
+            'O usuário dois trocou de nome. %s'
+        );
+        $muser->save(array(
+            'nome'  => 'Maria',
+            'idade' => '20',
+        ));
+        $this->assertEqual(7, $muser->select(null, 'count(*) as C')->C,
+            'Total de usuarios é 7. %s');
+        $data = $muser->get(7)->data();
+        unset($data['telephone']);
+        $this->assertEqual(array(
+            'id_user' => '7',
+            'nome'    => 'Maria',
+            'idade'   => '20',
+        ), $data, 'O usuário que acaba de ser inserido. %s');
+    }
 }
