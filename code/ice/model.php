@@ -54,8 +54,7 @@ class Model
         return $stmt->fetch();
     }
 
-    public function select($where = array(), $fields = '*', $limit = null, 
-                            $offset = null)
+    public function _where($where = array())
     {
         $_where = array();
         if ('string'==gettype($where)) {
@@ -72,6 +71,12 @@ class Model
                 $_where[] = "$key '$value'";
             }
         }
+        return $_where ? ' WHERE '.implode(' ', $_where) : '';
+    }
+
+    public function select($where = array(), $fields = '*', $limit = null, 
+                            $offset = null)
+    {
         if (!$fields) {
             $fields = '*';
         }
@@ -79,9 +84,7 @@ class Model
             $fields = implode(', ', (array) $fields);
         }
         $sql = 'SELECT '.$fields.' FROM '.$this->_table;
-        if ($_where) {
-            $sql .= ' WHERE '.implode(' ', $_where);
-        }
+        $sql .= $this->_where($where);
         if (!is_null($offset)) {
             $offset = (int) $offset;
         }
@@ -132,5 +135,10 @@ class Model
         $sql  = sprintf($sql, $table, $keys, $vals);
         $stmt = self::$_pdo->prepare($sql);
         return $stmt->execute($data) OR print_r($stmt->errorInfo());
+    }
+
+    public function update($data, array $where=array())
+    {
+        
     }
 }
