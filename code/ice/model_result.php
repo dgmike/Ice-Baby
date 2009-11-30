@@ -123,7 +123,7 @@ class Model_Result
 
     public function pagination($page)
     {
-        if (!$this->_pages) {
+        if (!$this->pages() OR $this->pages() == 1) {
             return '<!-- No pages defined for pagination! -->';
         }
         $init = $last = array();
