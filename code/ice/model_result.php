@@ -121,6 +121,43 @@ class Model_Result
         return $this->_model->save($data);
     }
 
+    public function pagination($page)
+    {
+        if (!$this->_pages) {
+            return '<!-- No pages defined for pagination! -->';
+        }
+        $init = $last = array();
+        if ($page > 1) {
+            $init = array(
+                    '',
+                    '<li class="primeiro"><a href="?p=1">Primeiro</a></li>',
+                    '<li class="anterior"><a href="?p='.($page-1).'">Anterior</a></li>',
+                    ''
+                    );
+        }
+        if ($page < $last) {
+            $last = array(
+                    '',
+                    '<li class="proximo"><a href="?p='.($page+1).'">Próximo</a></li>',
+                    '<li class="ultimo"><a href="?p='.$this->pages().'">Último</a></li>',
+                    '',
+                    );
+        }
+        $pages = array();
+        foreach (range(1, $this->pages()) as $p) {
+            $class = '';
+            $link  = '<a href="?p='.$p.'">'.$p.'</a>';
+            if ($p==$page) {
+                $class = ' class="atual"';
+                $link  = $p;
+            }
+            $pages[] = "<li$class>$link</li>";
+        }
+        $paginacao = array_merge($init, $pages, $last);
+        $paginacao = implode("\n", $paginacao);
+        return "<ul class=\"paginacao\">\n$paginacao\n</ul>";
+    }
+
     public function __destruct()
     {
         if ($this->_altated) {

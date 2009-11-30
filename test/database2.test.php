@@ -282,4 +282,29 @@ class Database2Test extends UnitTestCase
         $this->assertEqual('Carlos', $user->nome,
             'O nome do primeiro usuario apos o save. %s');
     }
+
+    public function testPagination()
+    {
+        $mtel = new Telephone;
+        $tels = $mtel->page('*', 1, null, 3);
+        $this->assertEqual(5, $tels->pages(), 'Total de páginas. %s');
+        $this->assertEqual(<<<EOF
+<ul class="paginacao">
+
+<li class="primeiro"><a href="?p=1">Primeiro</a></li>
+<li class="anterior"><a href="?p=1">Anterior</a></li>
+
+<li><a href="?p=1">1</a></li>
+<li class="atual">2</li>
+<li><a href="?p=3">3</a></li>
+<li><a href="?p=4">4</a></li>
+<li><a href="?p=5">5</a></li>
+
+<li class="proximo"><a href="?p=3">Próximo</a></li>
+<li class="ultimo"><a href="?p=5">Último</a></li>
+
+</ul>
+EOF
+        , $tels->pagination(2), 'Mostra a paginacao. %s');
+    }
 }
