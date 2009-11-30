@@ -68,6 +68,7 @@ class Model
                 if ($_where AND !preg_match('@^(and|or)\b@i', $key)) {
                     $key = "AND $key";
                 }
+                self::$_pdo->quote($value);
                 $_where[] = "$key '$value'";
             }
         }
@@ -137,8 +138,24 @@ class Model
         return $stmt->execute($data) OR print_r($stmt->errorInfo());
     }
 
-    public function update($data, array $where=array())
+    public function update($data, array $where=array(), $table = null)
     {
-        
+        $sql = "UPDATE %s SET %s %s"; # table, key=value, where
+        if (!$table) {
+            $table = $this->_table;
+        }
+        $data  = (array) $data;
+        $_data = array();
+        if (isset($data[$this->_key])) {
+            $where[$this->_key] = $data[$this->_key];
+            unset($data[$this->_key]);
+        }
+        foreach (array_keys($data) as $key) {
+            $_data[] = "$key = ?";
+        }
+        $where = $this->_where($where);
+        $sql   = sprintf($sql, $table, implode(', ', $_data), $where);
+        $stmt  = self::$_pdo->prepare($sql);
+        $stmt->execute(array_values($data));
     }
 }

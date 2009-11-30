@@ -209,4 +209,17 @@ class Database2Test extends UnitTestCase
             'Retornou o objeto inserido. %s'
         );
     }
+
+    public function testUpdate()
+    {
+        $muser = new User;
+        $user  = $muser->get(1);
+        $this->assertEqual('Alice', $user->nome, 'Nome da primeira pessoa. %s');
+        $muser->update(array(
+            'id_user' => '1',
+            'nome'    => 'Elias',
+        ));
+        $user  = $muser->get(1);
+        $this->assertEqual('Elias', $user->nome, 'Nome da primeira pessoa. %s');
+    }
 }
