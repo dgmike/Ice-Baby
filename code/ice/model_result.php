@@ -9,7 +9,8 @@ class Model_Result
 
     public function __construct($stmt, $model)
     {
-        $stmt->setFetchMode(PDO::FETCH_CLASS, 'Model_Result', array($stmt, $model));
+        $stmt->setFetchMode(PDO::FETCH_CLASS, 'Model_Result', 
+            array($stmt, $model));
         $this->_stmt = $stmt;
         $this->_model = $model;
         foreach ($model->hasMany as $item) {
@@ -81,8 +82,9 @@ class Model_Result
 
     public function tableRow($before=null, $after = null, $fields = null)
     {
-        $data = $this->data();
-        $data = array_diff_key($data, array_fill_keys($this->_model->hasMany, true));
+        $data       = $this->data();
+        $data_trued = array_fill_keys($this->_model->hasMany, true);
+        $data       = array_diff_key($data, $data_trued);
         if ($fields !== null) {
             $data = array_intersect_key($data, array_fill_keys($fields, true));
         }
