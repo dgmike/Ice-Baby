@@ -68,7 +68,10 @@ class Error
 function createDatabase()
 {
     $file = dirname(__FILE__).DIRECTORY_SEPARATOR.'banco.db';
-    unlink($file);
+    Model::$_pdo = null;
+    if (file_exists($file)) {
+        unlink($file);
+    }
     $conn = new PDO('sqlite://'.$file);
     $conn->query('CREATE TABLE user (
         id_user INTEGER PRIMARY KEY,

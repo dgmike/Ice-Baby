@@ -106,4 +106,13 @@ class Model_Result
         } while ($this->fetch());
         return implode("\n", $table);
     }
+
+
+    # public function save()
+    # {
+    #     $data = $this->_data;
+    #     $keys = array_fill_keys($this->_model->hasMany, true);
+    #     $data = array_diff_key($data, $keys);
+    #     return $this->_model->save($data);
+    # }
 }

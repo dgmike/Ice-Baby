@@ -1,8 +1,9 @@
 <?php
 require_once 'model_result.php';
 
-class Model extends PDO
+class Model
 {
+    static $_pdo = null;
     public $_table = null;
     public $_key = null;
     public $str = null;
@@ -33,19 +34,28 @@ class Model extends PDO
                 }
             }
         }
-        parent::__construct($dns, $username, $password, $driver_options);
+        if (!self::$_pdo) {
+            self::$_pdo = new PDO($dns, $username, $password, $driver_options);
+        }
+    }
+
+    public function __call($method, $params)
+    {
+        return call_user_func_array(array(self::$_pdo, $method), $params);
     }
 
     public function get($id)
     {
         $sql = 'SELECT * FROM '.$this->_table.' WHERE '.$this->_key.' = ?';
-        $stmt = $this->prepare($sql);
-        $stmt->setFetchMode(PDO::FETCH_CLASS, 'Model_Result', array($stmt, $this));
+        $stmt = self::$_pdo->prepare($sql);
+        $stmt->setFetchMode(PDO::FETCH_CLASS, 
+            'Model_Result', array($stmt, $this));
         $stmt->execute(array($id));
         return $stmt->fetch();
     }
 
-    public function select($where=array(), $fields='*', $limit=null, $offset=null)
+    public function select($where = array(), $fields = '*', $limit = null, 
+                            $offset = null)
     {
         $_where = array();
         if ('string'==gettype($where)) {
@@ -84,13 +94,15 @@ class Model extends PDO
         if (!is_null($offset) OR !is_null($limit)) {
             $sql .= " LIMIT $offset$limit";
         }
-        $stmt = $this->prepare($sql);
-        $stmt->setFetchMode(PDO::FETCH_CLASS, 'Model_Result', array($stmt, $this));
+        $stmt = self::$_pdo->prepare($sql);
+        $stmt->setFetchMode(PDO::FETCH_CLASS, 
+            'Model_Result', array($stmt, $this));
         $stmt->execute();
         return $stmt->fetch();
     }
 
-    public function page($fields = '*', $page = 1, $filter = null, $per_page = 20)
+    public function page($fields = '*', $page = 1, $filter = null, 
+                         $per_page = 20)
     {
         $offset = ($page-1) * $per_page;
         $limit  = $per_page;
@@ -114,16 +126,11 @@ class Model extends PDO
         if (null === $table) {
             $table = $this->_table;
         }
-        $keys = array_keys($data);
-        $vals = array_values($data);
-        $vls  = array_fill(0, count($keys), '?');
-        list($keys, $vls) = array(implode(', ', $keys), implode(', ', $vls));
-        $sql  = sprintf($sql, $table, $keys, $vls);
-        $stmt = $this->prepare($sql);
-        $stmt->execute($vals);
-    }
-
-    public function save($data = array(), $table = null)
-    {
+        $keys = implode(', ', array_keys($data));
+        $data = array_values($data);
+        $vals = implode(', ', array_fill(0, count($data), '?'));
+        $sql  = sprintf($sql, $table, $keys, $vals);
+        $stmt = self::$_pdo->prepare($sql);
+        return $stmt->execute($data) OR print_r($stmt->errorInfo());
     }
 }
