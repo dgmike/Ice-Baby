@@ -135,7 +135,7 @@ class Model_Result
                     ''
                     );
         }
-        if ($page < $last) {
+        if ($page < $this->pages()) {
             $last = array(
                     '',
                     '<li class="proximo"><a href="?p='.($page+1).'">Próximo</a></li>',
