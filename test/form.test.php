@@ -81,7 +81,7 @@ class FormTest extends UnitTestCase
             'Não vale method=null. %s');
     }
 
-    function testenctype()
+    function testEnctype()
     {
         $form = new Form($config = array('enctype' => 'multipart/form-data'));
         $content = $form->show();
