@@ -1,8 +1,8 @@
 <?php
-
 class Form
 {
-    private $debug = false;
+    var $debug = false;
+    var $elements = array();
 
     public function __construct($args=false)
     {
@@ -24,7 +24,7 @@ class Form
             $this->debug = true;
         }
         if ($this->debug) {
-            print '[FORM INIT. Elements: 0]';
+            print '[FORM INIT. Elements: 0]'.PHP_EOL;
         }
         if ($upload) {
             $method = 'post';
@@ -48,6 +48,14 @@ class Form
         }
         if ($open_form) {
             return '<form '.implode(' ', $open_form).'></form>';
+        }
+    }
+
+    public function addElement($element)
+    {
+        $this->elements[] = $element;
+        if ($this->debug) {
+            print '[FORM ADDED. Elements: '.count($this->elements).']'.PHP_EOL;
         }
     }
 }

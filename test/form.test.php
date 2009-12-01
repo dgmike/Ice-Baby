@@ -16,7 +16,7 @@ class FormTest extends UnitTestCase
         ob_start();
         $form = new Form($debug = true);
         $content = $this->content();
-        $this->assertEqual('[FORM INIT. Elements: 0]', $content,
+        $this->assertEqual("[FORM INIT. Elements: 0]".PHP_EOL, $content,
             'Inicializou com degub. %s');
     }
 
@@ -41,7 +41,7 @@ class FormTest extends UnitTestCase
         ob_start();
         $form = new Form($config = array('debug' => true));
         $content = $this->content();
-        $this->assertEqual('[FORM INIT. Elements: 0]', $content,
+        $this->assertEqual("[FORM INIT. Elements: 0]".PHP_EOL, $content,
             'Inicializou com degub. %s');
     }
 
@@ -149,5 +149,24 @@ class FormTest extends UnitTestCase
         $content = $form->show();
         $this->assertEqual('<form method="post" enctype="multipart/form-data"></form>',
             $content, 'Usando um formulário de POST para uploads. %s');
+    }
+
+    function testUploadManda()
+    {
+        $form = new Form($config = array('method' => 'get', 'enctype' => 'not', 'upload' => true));
+        $content = $form->show();
+        $this->assertEqual('<form method="post" enctype="multipart/form-data"></form>',
+            $content, 'Upload deve sobrescrever. %s');
+    }
+
+    function testAddElement()
+    {
+        # ob_start();
+        $form = new Form;
+        $form->debug = true;
+        $form->addElement('String');
+        $form->addElement('String');
+        $content = $this->content();
+        $this->assertEqual("[FORM ADDED. Elements: 1]".PHP_EOL."[FORM ADDED. Elements: 2]".PHP_EOL);
     }
 }
