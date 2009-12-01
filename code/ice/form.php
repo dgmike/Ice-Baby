@@ -14,6 +14,7 @@ class Form
             'action' => null,
             'method' => null,
             'class'  => null,
+            'extra'  => null,
         );
         $config = $args+$default_configs;
         extract($config, EXTR_SKIP);
@@ -24,7 +25,7 @@ class Form
         if ($this->debug) {
             print '[FORM INIT. Elements: 0]';
         }
-        foreach (array('action', 'method', 'class') as $item) {
+        foreach (array('action', 'method', 'class', 'extra') as $item) {
             $this->$item = $$item;
         }
     }
@@ -36,6 +37,9 @@ class Form
             if (!is_null($this->$item)) {
                 $open_form[] = "$item=\"{$this->$item}\"";
             }
+        }
+        if (!is_null($this->extra)) {
+            $open_form[] = $this->extra;
         }
         if ($open_form) {
             return '<form '.implode(' ', $open_form).'></form>';

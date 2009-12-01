@@ -96,5 +96,11 @@ class FormTest extends UnitTestCase
         $this->assertEqual('', $content,
             'Não vale class=null. %s');
     }
-
+    function testExtra()
+    {
+        $form = new Form($config = array('extra' => 'id="pagseguro"'));
+        $content = $form->show();
+        $this->assertEqual('<form id="pagseguro"></form>', $content,
+            'Mostra opções extras, string. %s');
+    }
 }
