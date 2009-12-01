@@ -96,6 +96,7 @@ class FormTest extends UnitTestCase
         $this->assertEqual('', $content,
             'Não vale class=null. %s');
     }
+
     function testExtra()
     {
         $form = new Form($config = array('extra' => 'id="pagseguro"'));
@@ -124,5 +125,13 @@ class FormTest extends UnitTestCase
         $this->assertEqual('<form action="/salvar" method="post" '.
             'class="formulario" id="usuario"></form>', $content,
             'Guardou e mostrou todos os componentes. %s');
+    }
+
+    function testUpload()
+    {
+        $form = new Form($config = array('upload' => true));
+        $content = $form->show();
+        $this->assertEqual('<form method="post" enctype="multipart/form-data"></form>',
+            $content, 'Usando um formulário de POST para uploads. %s');
     }
 }

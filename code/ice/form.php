@@ -15,6 +15,7 @@ class Form
             'method' => null,
             'class'  => null,
             'extra'  => null,
+            'upload' => false,
         );
         $config = $args+$default_configs;
         extract($config, EXTR_SKIP);
@@ -25,7 +26,11 @@ class Form
         if ($this->debug) {
             print '[FORM INIT. Elements: 0]';
         }
-        foreach (array('action', 'method', 'class', 'extra') as $item) {
+        if ($upload) {
+            $method = 'post';
+            $enctype = 'multipart/form-data';
+        }
+        foreach (array('action', 'method', 'class', 'extra', 'enctype') as $item) {
             $this->$item = $$item;
         }
     }
@@ -33,7 +38,7 @@ class Form
     public function show()
     {
         $open_form = array();
-        foreach (array('action', 'method', 'class') as $item) {
+        foreach (array('action', 'method', 'class', 'enctype') as $item) {
             if (!is_null($this->$item)) {
                 $open_form[] = "$item=\"{$this->$item}\"";
             }
