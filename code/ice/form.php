@@ -10,7 +10,10 @@ class Form
             $args = array('debug' => (bool) $args);
         }
         $default_configs = array(
-            'debug' => false,
+            'debug'  => false,
+            'action' => null,
+            'method' => null,
+            'class'  => null,
         );
         $config = $args+$default_configs;
         extract($config, EXTR_SKIP);
@@ -22,9 +25,7 @@ class Form
             print '[FORM INIT. Elements: 0]';
         }
         foreach (array('action', 'method', 'class') as $item) {
-            if (isset($$item)) {
-                $this->$item = $$item;
-            }
+            $this->$item = $$item;
         }
     }
 
