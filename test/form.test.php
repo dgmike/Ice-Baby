@@ -80,4 +80,21 @@ class FormTest extends UnitTestCase
         $this->assertEqual('', $content,
             'Não vale method=null. %s');
     }
+
+    function testClass()
+    {
+        $form = new Form($config = array('class' => 'formulario'));
+        $content = $form->show();
+        $this->assertEqual('<form class="formulario"></form>', $content,
+            'Mostra o form, já que existe class. %s');
+        $form = new Form($config = array('class' => ''));
+        $content = $form->show();
+        $this->assertEqual('<form class=""></form>', $content,
+            'Class vazia também vale. %s');
+        $form = new Form($config = array('class' => null));
+        $content = $form->show();
+        $this->assertEqual('', $content,
+            'Não vale class=null. %s');
+    }
+
 }

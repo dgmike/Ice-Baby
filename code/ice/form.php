@@ -21,7 +21,7 @@ class Form
         if ($this->debug) {
             print '[FORM INIT. Elements: 0]';
         }
-        foreach (array('action', 'method') as $item) {
+        foreach (array('action', 'method', 'class') as $item) {
             if (isset($$item)) {
                 $this->$item = $$item;
             }
@@ -31,11 +31,10 @@ class Form
     public function show()
     {
         $open_form = array();
-        if (!is_null($this->action)) {
-            $open_form[] = "action=\"{$this->action}\"";
-        }
-        if (!is_null($this->method)) {
-            $open_form[] = "method=\"{$this->method}\"";
+        foreach (array('action', 'method', 'class') as $item) {
+            if (!is_null($this->$item)) {
+                $open_form[] = "$item=\"{$this->$item}\"";
+            }
         }
         if ($open_form) {
             return '<form '.implode(' ', $open_form).'></form>';
