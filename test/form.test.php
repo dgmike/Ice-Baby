@@ -102,5 +102,27 @@ class FormTest extends UnitTestCase
         $content = $form->show();
         $this->assertEqual('<form id="pagseguro"></form>', $content,
             'Mostra opções extras, string. %s');
+        $form = new Form($config = array('extra' => ''));
+        $content = $form->show();
+        $this->assertEqual('<form ></form>', $content,
+            'Para opcoes extra em branco também vale. %s');
+        $form = new Form($config = array('extra' => null));
+        $content = $form->show();
+        $this->assertEqual('', $content,
+            'Se extra for null, não apresenta nada. %s');
+    }
+
+    function testTodasAsOpcoes()
+    {
+        $form = new Form($config = array(
+            'class'  => 'formulario',
+            'extra'  => 'id="usuario"',
+            'method' => 'post',
+            'action' => '/salvar',
+        ));
+        $content = $form->show();
+        $this->assertEqual('<form action="/salvar" method="post" '.
+            'class="formulario" id="usuario"></form>', $content,
+            'Guardou e mostrou todos os componentes. %s');
     }
 }
