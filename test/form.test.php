@@ -81,6 +81,22 @@ class FormTest extends UnitTestCase
             'Não vale method=null. %s');
     }
 
+    function testenctype()
+    {
+        $form = new Form($config = array('enctype' => 'multipart/form-data'));
+        $content = $form->show();
+        $this->assertEqual('<form enctype="multipart/form-data"></form>', $content,
+            'Mostra o form, já que existe enctype. %s');
+        $form = new Form($config = array('enctype' => ''));
+        $content = $form->show();
+        $this->assertEqual('<form enctype=""></form>', $content,
+            'enctype vazia também vale. %s');
+        $form = new Form($config = array('enctype' => null));
+        $content = $form->show();
+        $this->assertEqual('', $content,
+            'Não vale enctype=null. %s');
+    }
+
     function testClass()
     {
         $form = new Form($config = array('class' => 'formulario'));
