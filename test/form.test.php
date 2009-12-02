@@ -232,4 +232,16 @@ class FormTest extends UnitTestCase
             $form->_input('checkbox', array('class' => 'caminho')),
             'Criou um input checkbox. %s');
     }
+
+    function test_attrs()
+    {
+        $form = new Form;
+        $this->assertEqual('type="text"', $form->_attrs(array('type' => 'text')),
+            'Montou um input text. %s');
+        $this->assertEqual('type="radio" name="sexo" value="M"',
+            $form->_attrs(array('type' => 'radio', 'name'=>'sexo', 'value'=>'M')), 'Criou um input radio em segundos. %s');
+        $this->assertEqual('type="checkbox" class="caminho"',
+            $form->_attrs(array('type'=>'checkbox', 'class' => 'caminho')),
+            'Criou um input checkbox. %s');
+    }
 }

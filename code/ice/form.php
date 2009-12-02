@@ -62,6 +62,21 @@ class Form
         return $element;
     }
 
+    public function _attrs($args=null)
+    {
+        extract($args, EXTR_SKIP);
+        $attributes = array();
+        foreach (array('type', 'name', 'value', 'class', 'id') as $item) {
+            if (!is_null($$item)) {
+                $attributes[] = "{$item}=\"{$$item}\"";
+            }
+        }
+        if (!is_null($extra)) {
+            $attributes[] = $extra;
+        }
+        return implode(' ', $attributes);
+    }
+
     public function _input($type, $args = null)
     {
         if (is_scalar($args)) {
@@ -75,18 +90,10 @@ class Form
         } else {
             $args = (array) $args;
         }
-        extract($args, EXTR_SKIP);
+        $args = array('type' => $type) + $args;
         $input = '<input %s />';
-        $attributes = array("type=\"$type\"");
-        foreach (array('name', 'value', 'class', 'id') as $item) {
-            if (!is_null($$item)) {
-                $attributes[] = "{$item}=\"{$$item}\"";
-            }
-        }
-        if (!is_null($extra)) {
-            $attributes[] = $extra;
-        }
-        return sprintf($input, implode(' ', $attributes));
+        $attributes = call_user_func(array($this, '_attrs'), $args);
+        return sprintf($input, $attributes);
     }
 
     public function text()
