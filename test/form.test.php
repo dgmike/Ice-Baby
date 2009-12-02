@@ -189,4 +189,13 @@ class FormTest extends UnitTestCase
         $this->assertEqual($saida, '<input type="text" />',
             'O metodo deve retornar. %s');
     }
+
+    function testTextNameValue()
+    {
+        $form = new Form;
+        $this->assertEqual('<input type="text" name="nome" />', $form->text('nome'),
+            'Adicionou o elemento nome. %s');
+        $this->assertEqual('<input type="text" name="nome" value="Michael" />',
+            $form->text('nome', 'Michael'), 'Adicionou o elemento nome com value. %s');
+    }
 }

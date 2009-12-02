@@ -62,9 +62,16 @@ class Form
         return $element;
     }
 
-    public function text()
+    public function text($name = null, $value = null)
     {
-        $text = '<input type="text" />';
+        $text = '<input %s />';
+        $attributes = array('type="text"');
+        foreach (array('name', 'value') as $item) {
+            if (!is_null($$item)) {
+                $attributes[] = "{$item}=\"{$$item}\"";
+            }
+        }
+        $text = sprintf($text, implode(' ', $attributes));
         return $this->addElement($text);
     }
 }
