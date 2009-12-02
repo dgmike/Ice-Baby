@@ -38,6 +38,7 @@ class Form
     public function show()
     {
         $open_form = array();
+        $return = '%s';
         foreach (array('action', 'method', 'class', 'enctype') as $item) {
             if (!is_null($this->$item)) {
                 $open_form[] = "$item=\"{$this->$item}\"";
@@ -47,8 +48,9 @@ class Form
             $open_form[] = $this->extra;
         }
         if ($open_form) {
-            return '<form '.implode(' ', $open_form).'></form>';
+            $return = '<form '.implode(' ', $open_form).'>%s</form>';
         }
+        return sprintf($return, implode(PHP_EOL, $this->elements));
     }
 
     public function addElement($element)

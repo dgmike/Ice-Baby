@@ -170,5 +170,15 @@ class FormTest extends UnitTestCase
         $this->assertEqual($content,
             "[FORM ADDED. Elements: 1]".PHP_EOL."[FORM ADDED. Elements: 2]".PHP_EOL,
             'Gerou o log desejado. %s');
+        $this->assertEqual('String'.PHP_EOL.'String', $form->show(),
+            'Renderizou o formulário com os elementos. %s');
+    }
+
+    function testText()
+    {
+        $form = new Form;
+        $form->text();
+        $this->assertEqual($form->show(), '<input type="text" />',
+            'Criou o elemento de texto. %s');
     }
 }
