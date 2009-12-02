@@ -220,4 +220,16 @@ class FormTest extends UnitTestCase
             '<input type="text" name="nome" value="Michael" class="vNomeCompleto" id="form_nome" mask="XXX-XX" />',
             'Todos os valores definidos pelo usuario entram. %s');
     }
+
+    function test_input()
+    {
+        $form = new Form;
+        $this->assertEqual('<input type="text" />', $form->_input('text'),
+            'Montou um input text. %s');
+        $this->assertEqual('<input type="radio" name="sexo" value="M" />',
+            $form->_input('radio', 'sexo', 'M'), 'Criou um input radio em segundos. %s');
+        $this->assertEqual('<input type="checkbox" class="caminho" />',
+            $form->_input('checkbox', array('class' => 'caminho')),
+            'Criou um input checkbox. %s');
+    }
 }

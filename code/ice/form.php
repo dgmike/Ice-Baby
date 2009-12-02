@@ -62,22 +62,22 @@ class Form
         return $element;
     }
 
-    public function text($args = null)
+    public function _input($type, $args = null)
     {
         if (is_scalar($args)) {
             $args = array('name' => $args);
-            if (func_num_args() > 1) {
-                $args['value'] = func_get_arg(1);
-            }
             if (func_num_args() > 2) {
-                $args['extra'] = func_get_arg(2);
+                $args['value'] = func_get_arg(2);
+            }
+            if (func_num_args() > 3) {
+                $args['extra'] = func_get_arg(3);
             }
         } else {
             $args = (array) $args;
         }
-        extract($args);
-        $text = '<input %s />';
-        $attributes = array('type="text"');
+        extract($args, EXTR_SKIP);
+        $input = '<input %s />';
+        $attributes = array("type=\"$type\"");
         foreach (array('name', 'value', 'class', 'id') as $item) {
             if (!is_null($$item)) {
                 $attributes[] = "{$item}=\"{$$item}\"";
@@ -86,7 +86,14 @@ class Form
         if (!is_null($extra)) {
             $attributes[] = $extra;
         }
-        $text = sprintf($text, implode(' ', $attributes));
+        return sprintf($input, implode(' ', $attributes));
+    }
+
+    public function text()
+    {
+        $args = func_get_args();
+        array_unshift($args, 'text');
+        $text = call_user_func_array(array($this, '_input'), $args);
         return $this->addElement($text);
     }
 }
