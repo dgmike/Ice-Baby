@@ -60,4 +60,9 @@ class Form
             print '[FORM ADDED. Elements: '.count($this->elements).']'.PHP_EOL;
         }
     }
+
+    public function text()
+    {
+        $this->addElement('<input type="text" />');
+    }
 }
