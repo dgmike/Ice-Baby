@@ -161,12 +161,14 @@ class FormTest extends UnitTestCase
 
     function testAddElement()
     {
-        # ob_start();
+        ob_start();
         $form = new Form;
         $form->debug = true;
         $form->addElement('String');
         $form->addElement('String');
         $content = $this->content();
-        $this->assertEqual("[FORM ADDED. Elements: 1]".PHP_EOL."[FORM ADDED. Elements: 2]".PHP_EOL);
+        $this->assertEqual($content,
+            "[FORM ADDED. Elements: 1]".PHP_EOL."[FORM ADDED. Elements: 2]".PHP_EOL,
+            'Gerou o log desejado. %s');
     }
 }
