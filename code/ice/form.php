@@ -62,11 +62,23 @@ class Form
         return $element;
     }
 
-    public function text($name = null, $value = null, $extra = null)
+    public function text($args = null)
     {
+        if (is_scalar($args)) {
+            $args = array('name' => $args);
+            if (func_num_args() > 1) {
+                $args['value'] = func_get_arg(1);
+            }
+            if (func_num_args() > 2) {
+                $args['extra'] = func_get_arg(2);
+            }
+        } else {
+            $args = (array) $args;
+        }
+        extract($args);
         $text = '<input %s />';
         $attributes = array('type="text"');
-        foreach (array('name', 'value') as $item) {
+        foreach (array('name', 'value', 'class', 'id') as $item) {
             if (!is_null($$item)) {
                 $attributes[] = "{$item}=\"{$$item}\"";
             }

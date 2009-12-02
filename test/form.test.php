@@ -205,4 +205,19 @@ class FormTest extends UnitTestCase
         $this->assertEqual('<input type="text" name="idade" value="25" class="vInt" />',
             $form->text('idade', '25', 'class="vInt"', 'Adicionou os campos extras. %s'));
     }
+
+    function testTextConfig()
+    {
+        $form = new Form;
+        $input = $form->text($config = array(
+            'name'  => 'nome',
+            'value' => 'Michael',
+            'class' => 'vNomeCompleto',
+            'id'    => 'form_nome',
+            'extra' => 'mask="XXX-XX"',
+            ));
+        $this->assertEqual($input,
+            '<input type="text" name="nome" value="Michael" class="vNomeCompleto" id="form_nome" mask="XXX-XX" />',
+            'Todos os valores definidos pelo usuario entram. %s');
+    }
 }
