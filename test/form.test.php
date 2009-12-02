@@ -198,4 +198,11 @@ class FormTest extends UnitTestCase
         $this->assertEqual('<input type="text" name="nome" value="Michael" />',
             $form->text('nome', 'Michael'), 'Adicionou o elemento nome com value. %s');
     }
+
+    function testTextExtras()
+    {
+        $form = new Form;
+        $this->assertEqual('<input type="text" name="idade" value="25" class="vInt" />',
+            $form->text('idade', '25', 'class="vInt"', 'Adicionou os campos extras. %s'));
+    }
 }

@@ -62,7 +62,7 @@ class Form
         return $element;
     }
 
-    public function text($name = null, $value = null)
+    public function text($name = null, $value = null, $extra = null)
     {
         $text = '<input %s />';
         $attributes = array('type="text"');
@@ -70,6 +70,9 @@ class Form
             if (!is_null($$item)) {
                 $attributes[] = "{$item}=\"{$$item}\"";
             }
+        }
+        if (!is_null($extra)) {
+            $attributes[] = $extra;
         }
         $text = sprintf($text, implode(' ', $attributes));
         return $this->addElement($text);
