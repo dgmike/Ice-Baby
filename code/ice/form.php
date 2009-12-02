@@ -59,10 +59,12 @@ class Form
         if ($this->debug) {
             print '[FORM ADDED. Elements: '.count($this->elements).']'.PHP_EOL;
         }
+        return $element;
     }
 
     public function text()
     {
-        $this->addElement('<input type="text" />');
+        $text = '<input type="text" />';
+        return $this->addElement($text);
     }
 }
