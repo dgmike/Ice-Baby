@@ -122,4 +122,30 @@ function createDatabase()
                     VALUES (5, '555-0125')");
     $conn->query("INSERT INTO telephone (id_user, number) 
                     VALUES (6, '555-0012')");
+
+    $conn->query('CREATE TABLE admin (
+        id_admin INTEGER PRIMARY KEY,
+        login text
+    )');
+
+    $conn->query("INSERT INTO admin (login) VALUES ('bob')");
+    $conn->query("INSERT INTO admin (login) VALUES ('tim')");
+    $conn->query("INSERT INTO admin (login) VALUES ('jay')");
+
+    $conn->query('CREATE TABLE role (
+        id_role INTEGER PRIMARY KEY,
+        name text
+    )');
+
+    $conn->query("INSERT INTO role (name) VALUES ('admin')");
+    $conn->query("INSERT INTO role (name) VALUES ('editor')");
+
+    $conn->query('CREATE TABLE admin_role (
+        id_admin INTEGER KEY,
+        id_role INTEGER KEY
+    )');
+
+    $conn->query("INSERT INTO admin_role (id_admin, id_role) VALUES (1, 1)");
+    $conn->query("INSERT INTO admin_role (id_admin, id_role) VALUES (1, 2)");
+    $conn->query("INSERT INTO admin_role (id_admin, id_role) VALUES (2, 1)");
 }
