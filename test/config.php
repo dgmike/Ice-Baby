@@ -4,7 +4,7 @@ define('TEST_ICE_BASE_URL', 'http://localhost/Ice-Baby/test');
 $path = dirname(dirname(__FILE__))
         .DIRECTORY_SEPARATOR.'code';
 
-define('DB_DNS', 'sqlite2:'
+define('DB_DNS', 'sqlite:'
                 .dirname(__FILE__)
                 .DIRECTORY_SEPARATOR.'banco.db');
 
@@ -77,7 +77,7 @@ function createDatabase()
     if (file_exists($file)) {
         unlink($file);
     }
-    $conn = new PDO('sqlite://'.$file);
+    $conn = new PDO(DB_DNS);
     $conn->query('CREATE TABLE user (
         id_user INTEGER PRIMARY KEY,
         nome TEXT,
