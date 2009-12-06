@@ -1,10 +1,6 @@
 <?php
-include 'config.php';
-include 'ice/model.php';
-
-define('DB_DNS', 'sqlite://'
-                .dirname(__FILE__)
-                .DIRECTORY_SEPARATOR.'banco.db');
+include_once 'config.php';
+include_once 'ice/model.php';
 
 if (!class_exists('User')) {
     class User extends Model { 

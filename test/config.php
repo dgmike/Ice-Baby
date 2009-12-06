@@ -4,6 +4,11 @@ define('TEST_ICE_BASE_URL', 'http://localhost/Ice-Baby/test');
 $path = dirname(dirname(__FILE__))
         .DIRECTORY_SEPARATOR.'code';
 
+define('DB_DNS', 'sqlite2:'
+                .dirname(__FILE__)
+                .DIRECTORY_SEPARATOR.'banco.db');
+
+
 set_include_path($path.PATH_SEPARATOR.get_include_path());
 
 include_once dirname(dirname(__FILE__))
