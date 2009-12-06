@@ -1,17 +1,5 @@
 <?php
 include_once 'config.php';
-include_once 'ice/model.php';
-
-if (!class_exists('User')) {
-    class User extends Model { 
-        var $hasMany = array('telephone');
-    }
-}
-
-if (!class_exists('Telephone')) {
-    class Telephone extends Model { 
-    }
-}
 
 class Database extends UnitTestCase
 {
@@ -102,7 +90,7 @@ class Database extends UnitTestCase
             'O nome do primeiro usuario. %s');
         $this->assertEqual('1', (string) $result, 
             'O nome conforme definido em $str. %s');
-        $result->str = ':id_user: - :nome:';
+        $result->_str = ':id_user: - :nome:';
         $this->assertEqual('1', (string) $result, 
             'O nome conforme definido em $str. %s');
         $result->setStr(':id_user: - :nome:');

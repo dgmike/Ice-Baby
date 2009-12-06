@@ -4,12 +4,39 @@ define('TEST_ICE_BASE_URL', 'http://localhost/Ice-Baby/test');
 $path = dirname(dirname(__FILE__))
         .DIRECTORY_SEPARATOR.'code';
 
+set_include_path($path.PATH_SEPARATOR.get_include_path());
+
+/**
+ * Banco de dados
+ */
+include_once 'ice/model.php';
+
 define('DB_DNS', 'sqlite:'
                 .dirname(__FILE__)
                 .DIRECTORY_SEPARATOR.'banco.db');
 
+class User extends Model { 
+    var $_hasMany = array('telephone');
+}
 
-set_include_path($path.PATH_SEPARATOR.get_include_path());
+class Telephone extends Model { 
+}
+
+class Admin extends Model { 
+    var $_relatedJoin = array(
+            'roles' => 'Role',
+            );
+}
+
+class Role extends Model { 
+    var $_relatedJoin = array(
+            'admins' => 'Role',
+            );
+}
+
+/**
+ * SimpleTest
+ */
 
 include_once dirname(dirname(__FILE__))
              .DIRECTORY_SEPARATOR.'simpletest'

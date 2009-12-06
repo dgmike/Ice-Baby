@@ -1,17 +1,5 @@
 <?php
 include_once 'config.php';
-include_once 'ice/model.php';
-
-if (!class_exists('User')) {
-    class User extends Model { 
-        var $hasMany = array('telephone');
-    }
-}
-
-if (!class_exists('Telephone')) {
-    class Telephone extends Model { 
-    }
-}
 
 class Database2Test extends UnitTestCase
 {

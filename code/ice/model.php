@@ -6,8 +6,8 @@ class Model
     static $_pdo = null;
     public $_table = null;
     public $_key = null;
-    public $str = null;
-    public $hasMany = array();
+    public $_str = null;
+    public $_hasMany = array();
 
     public function __construct($dns=null, $username=null, $password=null,
             array $driver_options = array())
@@ -18,8 +18,8 @@ class Model
         if (!$this->_key) {
             $this->_key = 'id_'.$this->_table;
         }
-        if (!$this->str) {
-            $this->str = ":id_{$this->_table}:";
+        if (!$this->_str) {
+            $this->_str = ":id_{$this->_table}:";
         }
         $items = array('dns', 'username', 'password', 'driver_options');
         foreach ($items as $item) {

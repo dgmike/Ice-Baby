@@ -14,11 +14,14 @@ class Model_Result
             array($stmt, $model));
         $this->_stmt = $stmt;
         $this->_model = $model;
-        foreach ($model->hasMany as $item) {
+        foreach ($model->_hasMany as $item) {
             $i = ucfirst($item);
             $o = new $i;
+            if (!isset($this->_data[$model->_key])) {
+                continue;
+            }
             $where = array(
-                $model->_key => $this->_data[$model->_key]
+                $model->_key => $this->_data[trim($model->_key)],
             );
             $this->_data[$item] = $o->select($where);
         }
@@ -27,7 +30,11 @@ class Model_Result
     public function __set($key, $value)
     {
         if ($this->_model) {
-            $this->_altated = true;
+            if (substr($key,0,1)!=='_') {
+                $this->_data[$key] = $value;
+                $this->_altated = true;
+                return true;
+            }
         }
         $this->_data[$key] = $value;
     }
@@ -62,7 +69,7 @@ class Model_Result
 
     public function __toString()
     {
-        $string = $this->_model->str;
+        $string = $this->_model->_str;
         preg_match_all('@:\w+:@', $string, $matches);
         foreach ($matches[0] as $item) {
             $valor  = $this->_data[substr($item, 1, -1)];
@@ -73,7 +80,7 @@ class Model_Result
 
     public function setStr($string)
     {
-        $this->_model->str = $string;
+        $this->_model->_str = $string;
     }
 
     public function pages($pages=null)
@@ -87,7 +94,7 @@ class Model_Result
     public function tableRow($before=null, $after = null, $fields = null)
     {
         $data       = $this->data();
-        $data_trued = array_fill_keys($this->_model->hasMany, true);
+        $data_trued = array_fill_keys($this->_model->_hasMany, true);
         $data       = array_diff_key($data, $data_trued);
         if ($fields !== null) {
             $data = array_intersect_key($data, array_fill_keys($fields, true));
@@ -116,7 +123,7 @@ class Model_Result
     public function save()
     {
         $data = $this->_data;
-        $keys = array_fill_keys($this->_model->hasMany, true);
+        $keys = array_fill_keys($this->_model->_hasMany, true);
         $data = array_diff_key($data, $keys);
         return $this->_model->save($data);
     }
