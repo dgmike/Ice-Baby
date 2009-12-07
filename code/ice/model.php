@@ -8,6 +8,7 @@ class Model
     public $_key = null;
     public $_str = null;
     public $_hasMany = array();
+    public $_relatedJoin = array();
 
     public function __construct($dns=null, $username=null, $password=null,
             array $driver_options = array())

@@ -8,7 +8,7 @@ class Model_Result
     private $_pages   = null;
     private $_altated = false;
 
-    public function __construct($stmt, $model)
+    public function __construct($stmt, $model, $getRelatedJoin=true)
     {
         $stmt->setFetchMode(PDO::FETCH_CLASS, 'Model_Result', 
             array($stmt, $model));
@@ -24,6 +24,46 @@ class Model_Result
                 $model->_key => $this->_data[trim($model->_key)],
             );
             $this->_data[$item] = $o->select($where);
+        }
+        if ($getRelatedJoin) {
+            $this->mk_related_joins();
+        }
+    }
+
+    public function mk_related_joins()
+    {
+        $model = $this->_model;
+        foreach ($model->_relatedJoin as $key=>$value) {
+            $i = ucfirst(strtolower($value));
+            $o = new $i;
+            if (!isset($this->_data[$model->_key])) {
+                continue;
+            }
+            $table = array($model->_table, $o->_table);
+            sort($table);
+            $table = implode('_', $table);
+            $where = array(
+                $model->_key => $this->_data[trim($model->_key)],
+            );
+            $select = 'SELECT '.$o->_key.' FROM '.$table.$o->_where($where);
+            $ids_r  = $o->query($select, PDO::FETCH_NUM);
+            $ids    = array();
+            if (!$ids_r) {
+                continue;
+            }
+            foreach ($ids_r->fetchAll() as $id) {
+                $ids[] = $o->_key . ' = ' . $id[0];
+            }
+            if ($ids) {
+                $stmt = $o->prepare(
+                    'SELECT * FROM '.$o->_table.' WHERE '.
+                    implode(' OR ', $ids)
+                );
+                $stmt->setFetchMode(PDO::FETCH_CLASS, 
+                    'Model_Result', array($stmt, $o, false));
+                $stmt->execute();
+                $this->_data[$key] = $stmt->fetch();
+            }
         }
     }
 
@@ -46,6 +86,12 @@ class Model_Result
 
     public function __call($method, $args) 
     {
+        if ('add' === substr($method, 0, 3)) {
+            return $this->add(substr($method, 3), $args);
+        }
+        if ('remove' === substr($method, 0, 6)) {
+            return $this->remove(substr($method, 6), $args);
+        }
         $return = call_user_func_array(array($this->_stmt, $method), $args);
         if ($return instanceof Model_Result) {
             $this->_data = $return->data();
@@ -163,6 +209,59 @@ class Model_Result
         $paginacao = array_merge($init, $pages, $last);
         $paginacao = implode("\n", $paginacao);
         return "<ul class=\"paginacao\">\n$paginacao\n</ul>";
+    }
+
+    public function add($model, $args)
+    {
+        if (1!==count($args)) {
+            throw new Exception('Quantidade de argumentos invalidos.');
+        }
+        if (!in_array($model, $this->_model->_relatedJoin)) {
+            throw new Exception('RelatedJoin not found in declaration.');
+        }
+        $o = new $model;
+        $table = array($this->_model->_table, $o->_table);
+        sort($table);
+        $table = implode('_', $table);
+        $add = $args[0];
+        if (!is_scalar($add)) {
+            if ('Model_Result'!==get_class($add)) {
+                throw new Exception('Invalid argument to add RelatedJoin.');
+            }
+            $add = $add->data();
+            $add = $add[$o->_key];
+        }
+        $sql = "INSERT INTO $table ({$this->_model->_key}, {$o->_key})
+                VALUES ({$this->_data[$this->_model->_key]}, {$add})";
+        $o->exec($sql) OR print_r(array($o->errorInfo(), $sql));
+        $this->mk_related_joins();
+        return true;
+    }
+
+    public function remove($model, $args)
+    {
+        if (1!==count($args)) {
+            throw new Exception('Quantidade de argumentos invalidos.');
+        }
+        if (!in_array($model, $this->_model->_relatedJoin)) {
+            throw new Exception('RelatedJoin not found in declaration.');
+        }
+        $o = new $model;
+        $table = array($this->_model->_table, $o->_table);
+        sort($table);
+        $table = implode('_', $table);
+        $remove = $args[0];
+        if (!is_scalar($remove)) {
+            if ('Model_Result'!==get_class($remove)) {
+                throw new Exception('Invalid argument to remove RelatedJoin.');
+            }
+            $remove = $remove->data();
+            $remove = $remove[$o->_key];
+        }
+        $sql = 'DELETE FROM '.$table.' WHERE '.$o->_key.' = '.$remove;
+        $o->exec($sql);
+        $this->mk_related_joins();
+        return true;
     }
 
     public function __destruct()

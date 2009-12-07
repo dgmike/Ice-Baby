@@ -30,7 +30,7 @@ class Admin extends Model {
 
 class Role extends Model { 
     var $_relatedJoin = array(
-            'admins' => 'Role',
+            'admins' => 'Admin',
             );
 }
 
@@ -176,3 +176,4 @@ function createDatabase()
     $conn->query("INSERT INTO admin_role (id_admin, id_role) VALUES (1, 2)");
     $conn->query("INSERT INTO admin_role (id_admin, id_role) VALUES (2, 1)");
 }
+
