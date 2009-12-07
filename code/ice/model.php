@@ -45,6 +45,13 @@ class Model
         return call_user_func_array(array(self::$_pdo, $method), $params);
     }
 
+    public function delete($id)
+    {
+        $sql = 'DELETE FROM '.$this->_table.' WHERE '.$this->_key.' = ?';
+        $stmt = self::$_pdo->prepare($sql);
+        return $stmt->execute(array($id));
+    }
+
     public function get($id)
     {
         $sql = 'SELECT * FROM '.$this->_table.' WHERE '.$this->_key.' = ?';
