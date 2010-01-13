@@ -8,6 +8,7 @@ class Model
     public $_key = null;
     public $_str = null;
     public $_hasMany = array();
+    public $_multipleJoin = array();
     public $_relatedJoin = array();
 
     public function __construct($dns=null, $username=null, $password=null,
@@ -49,7 +50,7 @@ class Model
     {
         $sql = 'SELECT * FROM '.$this->_table.' WHERE '.$this->_key.' = ?';
         $stmt = self::$_pdo->prepare($sql);
-        $stmt->setFetchMode(PDO::FETCH_CLASS, 
+        $stmt->setFetchMode(PDO::FETCH_CLASS,
             'Model_Result', array($stmt, $this));
         $stmt->execute(array($id));
         return $stmt->fetch();
@@ -76,7 +77,7 @@ class Model
         return $_where ? ' WHERE '.implode(' ', $_where) : '';
     }
 
-    public function select($where = array(), $fields = '*', $limit = null, 
+    public function select($where = array(), $fields = '*', $limit = null,
                             $offset = null)
     {
         if (!$fields) {
@@ -100,13 +101,13 @@ class Model
             $sql .= " LIMIT $offset$limit";
         }
         $stmt = self::$_pdo->prepare($sql);
-        $stmt->setFetchMode(PDO::FETCH_CLASS, 
+        $stmt->setFetchMode(PDO::FETCH_CLASS,
             'Model_Result', array($stmt, $this));
         $stmt->execute();
         return $stmt->fetch();
     }
 
-    public function page($fields = '*', $page = 1, $filter = null, 
+    public function page($fields = '*', $page = 1, $filter = null,
                          $per_page = 20)
     {
         $offset = ($page-1) * $per_page;
