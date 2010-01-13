@@ -10,7 +10,7 @@ class Model_Result
 
     public function __construct($stmt, $model, $getRelatedJoin=true)
     {
-        $stmt->setFetchMode(PDO::FETCH_CLASS, 'Model_Result', 
+        $stmt->setFetchMode(PDO::FETCH_CLASS, 'Model_Result',
             array($stmt, $model));
         $this->_stmt = $stmt;
         $this->_model = $model;
@@ -26,11 +26,12 @@ class Model_Result
             $this->_data[$item] = $o->select($where);
         }
         if ($getRelatedJoin) {
-            $this->mk_related_joins();
+            $this->mk_multiple_joins();
+            //$this->mk_related_joins();
         }
     }
 
-    public function mk_related_joins()
+    public function mk_multiple_joins()
     {
         $model = $this->_model;
         foreach ($model->_relatedJoin as $key=>$value) {
@@ -59,7 +60,7 @@ class Model_Result
                     'SELECT * FROM '.$o->_table.' WHERE '.
                     implode(' OR ', $ids)
                 );
-                $stmt->setFetchMode(PDO::FETCH_CLASS, 
+                $stmt->setFetchMode(PDO::FETCH_CLASS,
                     'Model_Result', array($stmt, $o, false));
                 $stmt->execute();
                 $this->_data[$key] = $stmt->fetch();
@@ -84,7 +85,7 @@ class Model_Result
         return isset($this->_data[$key]) ? $this->_data[$key] : '';
     }
 
-    public function __call($method, $args) 
+    public function __call($method, $args)
     {
         if ('add' === substr($method, 0, 3)) {
             return $this->add(substr($method, 3), $args);
@@ -145,11 +146,13 @@ class Model_Result
         if ($fields !== null) {
             $data = array_intersect_key($data, array_fill_keys($fields, true));
         }
+
         foreach(array('before', 'after') as $item) {
             foreach ($this->data() as $key=>$value) {
                 $$item = str_replace(":{$key}:", $value, $$item);
             }
         }
+
         $row = implode('</td><td>', $data);
         if ($row) {
             $row = "<td>$row</td>";
@@ -234,7 +237,7 @@ class Model_Result
         $sql = "INSERT INTO $table ({$this->_model->_key}, {$o->_key})
                 VALUES ({$this->_data[$this->_model->_key]}, {$add})";
         $o->exec($sql) OR print_r(array($o->errorInfo(), $sql));
-        $this->mk_related_joins();
+        $this->mk_multiple_joins();
         return true;
     }
 
@@ -260,7 +263,7 @@ class Model_Result
         }
         $sql = 'DELETE FROM '.$table.' WHERE '.$o->_key.' = '.$remove;
         $o->exec($sql);
-        $this->mk_related_joins();
+        $this->mk_multiple_joins();
         return true;
     }
 
