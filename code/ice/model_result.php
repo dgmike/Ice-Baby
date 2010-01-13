@@ -27,14 +27,14 @@ class Model_Result
         }
         if ($getRelatedJoin) {
             $this->mk_multiple_joins();
-            //$this->mk_related_joins();
+            $this->mk_related_join();
         }
     }
 
     public function mk_multiple_joins()
     {
         $model = $this->_model;
-        foreach ($model->_relatedJoin as $key=>$value) {
+        foreach ($model->_multipleJoin as $key=>$value) {
             $i = ucfirst(strtolower($value));
             $o = new $i;
             if (!isset($this->_data[$model->_key])) {
@@ -65,6 +65,19 @@ class Model_Result
                 $stmt->execute();
                 $this->_data[$key] = $stmt->fetch();
             }
+        }
+    }
+
+    public function mk_related_join()
+    {
+        $model = $this->_model;
+        foreach ($model->_relatedJoin as $key => $value) {
+            $i = ucfirst(strtolower($value));
+            $o = new $i;
+        if (!isset($this->_data[$model->_key])) {
+            continue;
+        }
+        $this->_data[$key] = $o->get($this->_data[trim($o->_key)]);
         }
     }
 
@@ -219,7 +232,7 @@ class Model_Result
         if (1!==count($args)) {
             throw new Exception('Quantidade de argumentos invalidos.');
         }
-        if (!in_array($model, $this->_model->_relatedJoin)) {
+        if (!in_array($model, $this->_model->_multipleJoin)) {
             throw new Exception('RelatedJoin not found in declaration.');
         }
         $o = new $model;
@@ -246,7 +259,7 @@ class Model_Result
         if (1!==count($args)) {
             throw new Exception('Quantidade de argumentos invalidos.');
         }
-        if (!in_array($model, $this->_model->_relatedJoin)) {
+        if (!in_array($model, $this->_model->_multipleJoin)) {
             throw new Exception('RelatedJoin not found in declaration.');
         }
         $o = new $model;
