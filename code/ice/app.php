@@ -3,6 +3,25 @@ error_reporting(E_ALL);
 
 include_once 'default_controller.php';
 
+function noCache()
+{
+    header("Last-Modified: " . gmdate( "D, j M Y H:i:s" ) . " GMT"); // Date in the past 
+    header("Expires: " . gmdate( "D, j M Y H:i:s", time() ) . " GMT"); // always modified 
+    header("Cache-Control: no-store, no-cache, must-revalidate"); // HTTP/1.1 
+    header("Cache-Control: post-check=0, pre-check=0", FALSE); 
+    header("Pragma: no-cache");
+}
+
+/**
+ * Runs an error type
+ *
+ * @uses Error
+ * @param int    $code    Error code
+ * @param string $message Mensagem de erro
+ * @param string $method  GET or POST method of error
+ *
+ * return void
+ */
 function ice_error($code, $message, $method='GET')
 {
     $error_class = new Error;
@@ -12,6 +31,11 @@ function ice_error($code, $message, $method='GET')
     call_user_func( $callback );
 }
 
+/**
+ * Starts an application, pass yours urls by 
+ *
+ *
+ */
 function app($urls, $url=null, $method = null)
 {
     if ('array' !== gettype($urls)) {
