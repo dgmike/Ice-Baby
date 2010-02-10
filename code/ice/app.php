@@ -3,6 +3,16 @@ error_reporting(E_ALL);
 
 include_once 'default_controller.php';
 
+/**
+ * Runs an error type
+ *
+ * @uses Error
+ * @param int    $code    Error code
+ * @param string $message Mensagem de erro
+ * @param string $method  GET or POST method of error
+ *
+ * return void
+ */
 function ice_error($code, $message, $method='GET')
 {
     $error_class = new Error;
@@ -12,6 +22,22 @@ function ice_error($code, $message, $method='GET')
     call_user_func( $callback );
 }
 
+/**
+ * Starts an application, pass yours urls by associatve
+ * array. Where the key is an regexp to url defined
+ * and the value is the class to use like a controller.
+ *
+ * Ex:
+ * <?php
+ * app(array(
+ *     '^/home/posts/?$'      => 'Posts',
+ *     '^/home/categories/?$' => 'Categories',
+ * ));
+ *
+ * @param array  $urls   URLs to map your application
+ * @param string $url    You can pass the url defining where the user is
+ * @param string $method The method POST|GET|PUT|INSERT... to use in your Controller
+ */
 function app($urls, $url=null, $method = null)
 {
     if ('array' !== gettype($urls)) {
