@@ -40,22 +40,15 @@ if (ini_get('magic_quotes_gpc')) {
 /**
  * Referenciando os arquivos que serão usados pelo sistema
  */
-require_once('ice/app.php');
-require_once('ice/model.php');
+
+require_once('app.php');
 require_once('model.php');
-require_once('helper.php');
+require_once('helper/helper.php');
 
 require_once('library/validate.php');
 require_once('library/message.php');
 require_once('library/image.php');
 
-require_once('controller/categoria.php');
-require_once('controller/atributo.php');
-require_once('controller/tproduto.php');
-require_once('controller/produto.php');
-require_once('controller/usuario.php');
-require_once('controller/conta.php');
-require_once('controller/upload.php');
 
 /**
  * Carregando a biblioteca de mensagens na inicialização que estará disponível para
