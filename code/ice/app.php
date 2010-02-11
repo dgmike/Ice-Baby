@@ -32,9 +32,20 @@ function ice_error($code, $message, $method='GET')
 }
 
 /**
- * Starts an application, pass yours urls by 
+ * Starts an application, pass yours urls by associatve
+ * array. Where the key is an regexp to url defined
+ * and the value is the class to use like a controller.
  *
+ * Ex:
+ * <?php
+ * app(array(
+ *     '^/home/posts/?$'      => 'Posts',
+ *     '^/home/categories/?$' => 'Categories',
+ * ));
  *
+ * @param array  $urls   URLs to map your application
+ * @param string $url    You can pass the url defining where the user is
+ * @param string $method The method POST|GET|PUT|INSERT... to use in your Controller
  */
 function app($urls, $url=null, $method = null)
 {
