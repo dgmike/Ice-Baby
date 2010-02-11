@@ -1,4 +1,6 @@
-<?php if (!defined('BASE_URL')) exit('No direct script access allowed');
+<?php 
+if (!defined('BASE_URL')) exit('No direct script access allowed');
+
 /**
  * Message:: A classe que escreve o retorno de uma mensagem adicionada na sessão
  * @author ldmotta <ldmotta@gmail.com>
@@ -37,7 +39,7 @@ class Messages {
      * @return void
      */
     function add($message, $type = 'message') {
-        $messages = $_SESSION['messages'];
+        $messages = (array_key_exists('messages', $_SESSION)) ? $_SESSION['messages'] : '';
         // handle PEAR errors gracefully
         if ($this->is_a($message, 'PEAR_Error')) {
             $message = $message->getMessage();
@@ -47,7 +49,7 @@ class Messages {
                 $type = 'message';
             }
         // don't repeat messages!
-        if (!in_array($message, $messages[$type]) && is_string($message)) {
+        if (is_array($messages) && !in_array($message, $messages[$type]) && is_string($message)) {
             $messages[$type][] = $message;
         }
         $messages = $_SESSION['messages'] = $messages;
