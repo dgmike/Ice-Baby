@@ -83,3 +83,26 @@ function app($urls, $url=null, $method = null)
     }
     ice_error(404, 'Page Not Found', $method);
 }
+
+function ice_autoload($class, $routes){
+	if(is_array($routes)){
+		$path_info = str_replace('/admin/', '', $_SERVER['PATH_INFO']);
+		foreach($routes as $regex => $className){
+			if($className == $class){
+				$parsePath = explode('/',$path_info);
+				$controleArquivo = trim(strtolower($parsePath[0]));
+				$ultimaLetra = substr($parsePath[0], -1);
+				
+				#Desplurariza a palavra caso ela esteja no plural
+				if($ultimaLetra == 's')
+					$controleArquivo = substr($parsePath[0], 0, -1);
+			
+				if($controleArquivo == "")
+					require_once('app/controller/home.php');
+				else
+					require_once('app/controller/' . $controleArquivo . '.php');
+				
+			}
+		}
+	}
+}
