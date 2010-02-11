@@ -1,5 +1,7 @@
 <?php
 
+require_once dirname(__FILE__).'/default_controllers.php';
+
 /**
  * app - Starts the application, use it to map your urls to
  * controllers. You have to pass an associative array to 
