@@ -1,6 +1,4 @@
 <?php
-error_reporting(E_ALL);
-
 include_once 'default_controller.php';
 
 function noCache()
