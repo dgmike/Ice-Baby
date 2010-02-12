@@ -64,12 +64,12 @@ function app($urls, $url=null, $method = null)
         $regexp = '@'.str_replace('@', '\@', $regexp).'@';
         if (preg_match($regexp, $url, $args)) {
             if (!class_exists($className)) {
-                ice_error(501, 'Class ({$className}) Not Found', $method);
+                ice_error(501, "Class ({$className}) Not Found", $method);
                 return false;
             }
             $class = new $className;
             if (!is_callable(array($class, $method))) {
-                ice_error(501, 'Method ({$method}) Not Found', $method);
+                ice_error(501, "Method ({$method}) Not Found", $method);
                 return false;
             }
             if ($args) {
