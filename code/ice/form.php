@@ -1,21 +1,45 @@
 <?php
-class Form
+/**
+ * Class to generate forms
+ * 
+ */
+class Ice_Form
 {
     var $debug = false;
     var $elements = array();
 
+    /**
+     * Constructor, creates a new form
+     *
+     * Pass an array of configs to make your form uniq! Sample:
+     *
+     * array(
+     *     'debug'   => false,               # Everithing is outputed since here
+     *     'action'  => 'http://google.com', # The url where the form go
+     *     'method'  => 'get',               # Method of form (GET|POST)
+     *     'class'   => '',                  # the class you want to attribute
+     *     'extra'   => 'id="iceform"'       # Pits this extra content on form tag
+     *     'upload'  => false,               # if true, method = post, enctype = multipart/form-data
+     *     'enctype' => null,                # The enctype of the form
+     * )
+     *
+     * @access public
+     * @param array $args Associative array of configs
+     * @return void
+     */
     public function __construct($args=false)
     {
         if (!in_array(gettype($args), array('array', 'object'))) {
             $args = array('debug' => (bool) $args);
         }
         $default_configs = array(
-            'debug'  => false,
-            'action' => null,
-            'method' => null,
-            'class'  => null,
-            'extra'  => null,
-            'upload' => false,
+            'debug'   => false,
+            'action'  => null,
+            'method'  => null,
+            'class'   => null,
+            'extra'   => null,
+            'upload'  => false,
+            'enctype' => null,
         );
         $config = $args+$default_configs;
         extract($config, EXTR_SKIP);
@@ -37,6 +61,12 @@ class Form
         }
     }
 
+    /**
+     * show - Shows the form
+     * 
+     * @access public
+     * @return string
+     */
     public function show()
     {
         $open_form = array();
@@ -55,6 +85,13 @@ class Form
         return sprintf($return, implode(PHP_EOL, $this->elements));
     }
 
+    /**
+     * addElement - Add an element to form
+     * 
+     * @param string $element The element to add to form
+     * @access public
+     * @return void
+     */
     public function addElement($element)
     {
         $this->elements[] = $element;
@@ -64,6 +101,13 @@ class Form
         return $element;
     }
 
+    /**
+     * _attrs - 
+     * 
+     * @param mixed $args 
+     * @access public
+     * @return void
+     */
     public function _attrs($args=null)
     {
         extract($args, EXTR_SKIP);
