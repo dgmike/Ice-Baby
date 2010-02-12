@@ -48,6 +48,7 @@ require_once('helper/helper.php');
 require_once('library/validate.php');
 require_once('library/message.php');
 require_once('library/image.php');
+require_once('library/image.php');
 
 
 /**
