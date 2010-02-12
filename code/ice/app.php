@@ -1,7 +1,7 @@
 <?php
 error_reporting(E_ALL);
 
-include_once 'default_controller.php';
+require_once('default_controller.php');
 
 function noCache()
 {
@@ -84,11 +84,14 @@ function app($urls, $url=null, $method = null)
     ice_error(404, 'Page Not Found', $method);
 }
 
+#Carrega automaticamente os controles conforme são instanciados
+
 function ice_autoload($class, $routes){
-	if(is_array($routes)){
+	
+	if(is_array($routes)):
 		$path_info = str_replace('/admin/', '', $_SERVER['PATH_INFO']);
-		foreach($routes as $regex => $className){
-			if($className == $class){
+		foreach($routes as $regex => $className):
+			if($className == $class):
 				$parsePath = explode('/',$path_info);
 				$controleArquivo = trim(strtolower($parsePath[0]));
 				$ultimaLetra = substr($parsePath[0], -1);
@@ -102,7 +105,30 @@ function ice_autoload($class, $routes){
 				else
 					require_once('app/controller/' . $controleArquivo . '.php');
 				
-			}
-		}
-	}
+			endif;
+		endforeach;
+	endif;
+}
+
+#Carrega helpers e librarys
+function ice_autoload_componnets($autoload){
+
+	if(is_array($autoload)):
+		foreach($autoload as $component => $array_compoents):
+			foreach($array_compoents as $comp_name):
+				$component_singular = substr($component, 0, -1);
+		
+				$path_component_pub = "app/{$component_singular}/{$comp_name}.php";
+				$path_component_ice = "ice/{$component_singular}/{$comp_name}.php";
+		
+				if(file_exists($path_component_pub)):
+					include_once($path_component_pub);
+				elseif(file_exists($path_component_ice)):
+					include_once($path_component_ice);
+				else:
+					ice_error('501', ucFirst($component_singular) . ' <strong> ' . $comp_name . '</strong> nao encontrada(o)');
+				endif;
+			endforeach;
+		endforeach;
+	endif;
 }

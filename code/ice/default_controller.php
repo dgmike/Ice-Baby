@@ -1,5 +1,6 @@
 <?php
-if (!class_exists('Error')) {
+
+//if (!class_exists('Error')) {
 
 class Error
 {
@@ -27,4 +28,4 @@ EOF;
     }
 }
 
-} // CLASS EXISTS ERROR
+//} // CLASS EXISTS ERROR
