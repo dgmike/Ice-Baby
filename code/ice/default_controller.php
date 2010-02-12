@@ -1,7 +1,12 @@
-<?php
+<?php 
 
-//if (!class_exists('Error')) {
+// Default Ice Controllers, you can create your own only creating it
 
+// See the magic? If you create your own Controller, we do not put our hands
+if (!class_exists('Error')) {
+/**
+ * Controller to error messages
+ */
 class Error
 {
     public $error_code;
@@ -28,4 +33,4 @@ EOF;
     }
 }
 
-//} // CLASS EXISTS ERROR
+} // CLASS EXISTS ERROR
