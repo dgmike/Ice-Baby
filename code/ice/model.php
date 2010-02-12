@@ -1,6 +1,17 @@
 <?php
 require_once 'model_result.php';
 
+/**
+ * Model 
+ *
+ * Extends this Model for each table you use
+ * 
+ * @package 
+ * @version $id$
+ * @copyright 1997-2005 The PHP Group
+ * @author Michael Granados <michaelgranados@gmail.com> 
+ * @license PHP Version 3.0 {@link http://www.php.net/license/3_0.txt}
+ */
 class Model
 {
     static $_pdo = null;
@@ -11,8 +22,17 @@ class Model
     public $_multipleJoin = array();
     public $_relatedJoin = array();
 
-    public function __construct($dns=null, $username=null, $password=null,
-            array $driver_options = array())
+    /**
+     * __construct - creates the Model Object
+     * 
+     * @param string $dns           String to connect @see PDO
+     * @param string $username      Username to connect on database @see PDO
+     * @param string $password      Password to connect on database @see PDO
+     * @param array $driver_options Driver options @see PDO
+     * @access public
+     * @return void
+     */
+    public function __construct($dns=null, $username=null, $password=null, array $driver_options = array())
     {
         if (!$this->_table) {
             $this->_table = strtolower(get_class($this));
@@ -41,11 +61,30 @@ class Model
         }
     }
 
+    /**
+     * __call - Redirect to PDO
+     * 
+     * If you needs a PDO method, just use this object
+     *
+     * @param mixed $method 
+     * @param mixed $params 
+     * @access public
+     * @return PDO_result
+     */
     public function __call($method, $params)
     {
         return call_user_func_array(array(self::$_pdo, $method), $params);
     }
 
+    /**
+     * get - Get a row of table
+     *
+     * @TODO id will accept array where the $this->_key is an array
+     * 
+     * @param int $id ID you want to select
+     * @access public
+     * @return Model_Result
+     */
     public function get($id)
     {
         $sql = 'SELECT * FROM '.$this->_table.' WHERE '.$this->_key.' = ?';
@@ -56,13 +95,35 @@ class Model
         return $stmt->fetch();
     }
 
+    /**
+     * _where - Makes a where string
+     * 
+     * Makes a where string to helper the queries. You just need
+     * to pass an associative array or the where string.
+     *
+     * Eg:
+     * $table->_where(array(
+     *      'name LIKE' => 'Mike',
+     *      'age'       => 25,
+     *      'OR age'    => 30,
+     * ));
+     * $table->_where('name LIKE "%Mike%" AND age = 25 OR age = 25');
+     *
+     * @param array|string $where Where params
+     * @access public
+     * @return void
+     */
     public function _where($where = array())
     {
         $_where = array();
         if ('string'==gettype($where)) {
             $_where[] = $where;
-        } elseif (in_array(gettype($where), array('array', 'object'))) {
+        } elseif (is_scalar($where)) {
             foreach ($where as $key=>$value) {
+                // @TODO englobe array $value`s
+                // if ('array' === gettype($value)) {
+                //     $_where[] = '(' . $this->_where($value) . ')';
+                // }
                 $key = trim($key);
                 if (strpos(trim($key), ' ')===false) {
                     $key .= ' = ';
@@ -77,8 +138,7 @@ class Model
         return $_where ? ' WHERE '.implode(' ', $_where) : '';
     }
 
-    public function select($where = array(), $fields = '*', $limit = null,
-                            $offset = null)
+    public function select($where = array(), $fields = '*', $limit = null, $offset = null)
     {
         if (!$fields) {
             $fields = '*';
