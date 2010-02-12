@@ -189,6 +189,18 @@ function the_msg($type = null) {
 }
 
 /**
+ * msg_add Adiciona uma mensagem na Sessão
+ * @param string $msg Texto da(s) mensagem(ns) inseridas com add() @see function add()
+ * @return string $tipo Tipo de mensagem @see /admin/library/message.php na linha 9
+ * @author Igor Escobar
+ */
+function msg_add($msg, $tipo){
+	global $msgObject;
+	
+	$msgObject->add($msg, $tipo);
+}
+
+/**
  * make_path() Recebe um endereço de um diretório e cria caso não exista
  * @param string $folder Caminho do diretório a ser criado
  * @return string $folder Retorna o endereço do diretório criado ou false caso não consiga criar
