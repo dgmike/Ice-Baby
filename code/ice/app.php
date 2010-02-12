@@ -1,7 +1,5 @@
 <?php
-error_reporting(E_ALL);
-
-require_once('default_controller.php');
+include_once 'default_controller.php';
 
 function noCache()
 {
@@ -66,12 +64,12 @@ function app($urls, $url=null, $method = null)
         $regexp = '@'.str_replace('@', '\@', $regexp).'@';
         if (preg_match($regexp, $url, $args)) {
             if (!class_exists($className)) {
-                ice_error(501, 'Class Not Found', $method);
+                ice_error(501, "Class ({$className}) Not Found", $method);
                 return false;
             }
             $class = new $className;
             if (!is_callable(array($class, $method))) {
-                ice_error(501, 'Method Not Found', $method);
+                ice_error(501, "Method ({$method}) Not Found", $method);
                 return false;
             }
             if ($args) {
@@ -96,10 +94,15 @@ function ice_autoload($class, $routes){
 				$controleArquivo = trim(strtolower($parsePath[0]));
 				$ultimaLetra = substr($parsePath[0], -1);
 				
+				$cleaned_parse = array_filter($parsePath);
+				$aKeys = array_keys($cleaned_parse);
+				
+				$controleArquivo = $parsePath[$aKeys[0]];
+				
 				#Desplurariza a palavra caso ela esteja no plural
 				if($ultimaLetra == 's')
 					$controleArquivo = substr($parsePath[0], 0, -1);
-			
+				
 				if($controleArquivo == "")
 					require_once('app/controller/home.php');
 				else
