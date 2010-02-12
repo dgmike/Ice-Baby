@@ -87,21 +87,32 @@ function app($urls, $url=null, $method = null)
 function ice_autoload($class, $routes){
 	
 	if(is_array($routes)):
-		$path_info = str_replace('/admin/', '', $_SERVER['PATH_INFO']);
+
+		$path_info = preg_replace('@/admin/?@', '', $_SERVER['PATH_INFO']);
 		foreach($routes as $regex => $className):
 			if($className == $class):
 				$parsePath = explode('/',$path_info);
 				$controleArquivo = trim(strtolower($parsePath[0]));
 				$ultimaLetra = substr($parsePath[0], -1);
 				
+				$cleaned_parse = array_filter($parsePath);
+				$aKeys = array_keys($cleaned_parse);
+				
+				$controleArquivo = $parsePath[$aKeys[0]];
+				
 				#Desplurariza a palavra caso ela esteja no plural
 				if($ultimaLetra == 's')
 					$controleArquivo = substr($parsePath[0], 0, -1);
-			
-				if($controleArquivo == "")
+				
+				$path_controller = 'app/controller/' . $controleArquivo . '.php';
+				
+				if($controleArquivo == ""):
 					require_once('app/controller/home.php');
-				else
-					require_once('app/controller/' . $controleArquivo . '.php');
+				elseif(file_exists($path_controller)):
+					require_once($path_controller);
+				else:
+					ice_error(501, "Controller ({$controleArquivo}) Not Found");
+				endif;
 				
 			endif;
 		endforeach;
@@ -124,7 +135,7 @@ function ice_autoload_componnets($autoload){
 				elseif(file_exists($path_component_ice)):
 					include_once($path_component_ice);
 				else:
-					ice_error('501', ucFirst($component_singular) . ' <strong> ' . $comp_name . '</strong> nao encontrada(o)');
+					ice_error('501', ucFirst($component_singular) . ' <strong> ' . $comp_name . '</strong> Not Found');
 				endif;
 			endforeach;
 		endforeach;
