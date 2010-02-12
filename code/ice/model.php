@@ -138,6 +138,18 @@ class Model
         return $_where ? ' WHERE '.implode(' ', $_where) : '';
     }
 
+    /**
+     * select - Do a simple select
+     * 
+     * It just select a resultset from a table
+     *
+     * @param array  $where  An where to select @see $this->_where
+     * @param string $fields Fields to select, allways select the $this->_key
+     * @param int    $limit  Limit to your select
+     * @param int    $offset Offset to your select
+     * @access public
+     * @return void
+     */
     public function select($where = array(), $fields = '*', $limit = null, $offset = null)
     {
         if (!$fields) {
@@ -167,8 +179,20 @@ class Model
         return $stmt->fetch();
     }
 
-    public function page($fields = '*', $page = 1, $filter = null,
-                         $per_page = 20)
+    /**
+     * page - Makes a simple select using easy page limit
+     * 
+     * Its easy to make a paginable result to your project, just use
+     * this method.
+     *
+     * @param string $fields   String of fields to select, allways select $this->_key
+     * @param int    $page     Page to select
+     * @param mixed  $filter   Filter to your select, just a where clause @see $this->_where
+     * @param int    $per_page Quantity per page
+     * @access public
+     * @return void
+     */
+    public function page($fields = '*', $page = 1, $filter = null, $per_page = 20)
     {
         $offset = ($page-1) * $per_page;
         $limit  = $per_page;
@@ -185,6 +209,14 @@ class Model
         return $return;
     }
 
+    /**
+     * insert - Insert a new row on the database
+     * 
+     * @param array $data 
+     * @param mixed $table 
+     * @access public
+     * @return void
+     */
     public function insert($data = array(), $table = null)
     {
         $sql   = 'INSERT INTO %s (%s) VALUES (%s)';
