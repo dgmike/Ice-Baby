@@ -94,10 +94,15 @@ function ice_autoload($class, $routes){
 				$controleArquivo = trim(strtolower($parsePath[0]));
 				$ultimaLetra = substr($parsePath[0], -1);
 				
+				$cleaned_parse = array_filter($parsePath);
+				$aKeys = array_keys($cleaned_parse);
+				
+				$controleArquivo = $parsePath[$aKeys[0]];
+				
 				#Desplurariza a palavra caso ela esteja no plural
 				if($ultimaLetra == 's')
 					$controleArquivo = substr($parsePath[0], 0, -1);
-			
+				
 				if($controleArquivo == "")
 					require_once('app/controller/home.php');
 				else
