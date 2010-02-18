@@ -76,9 +76,15 @@ class Model
         }
         return $_where ? ' WHERE '.implode(' ', $_where) : '';
     }
-
+	
+	public function find($where = array(), $fields = '*', $limit = null,
+                            $offset = null, $order = null)
+	{
+		
+		return $this->select($where, $fields, $limit, $offset, $order, 'all');	
+	}
     public function select($where = array(), $fields = '*', $limit = null,
-                            $offset = null)
+                            $offset = null, $order = null, $fetch = null)
     {
         if (!$fields) {
             $fields = '*';
@@ -100,11 +106,20 @@ class Model
         if (!is_null($offset) OR !is_null($limit)) {
             $sql .= " LIMIT $offset$limit";
         }
+		if(!is_null($order)){
+			$sql .= " ORDER BY {$order}";
+		}
+
         $stmt = self::$_pdo->prepare($sql);
         $stmt->setFetchMode(PDO::FETCH_CLASS,
             'Model_Result', array($stmt, $this));
         $stmt->execute();
-        return $stmt->fetch();
+
+		if($fetch == 'all')
+        	return $stmt->fetchAll();
+		else
+			return $stmt->fetch();
+			
     }
 
     public function page($fields = '*', $page = 1, $filter = null,
