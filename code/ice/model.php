@@ -211,9 +211,17 @@ class Model
 
     /**
      * insert - Insert a new row on the database
-     * 
-     * @param array $data 
-     * @param mixed $table 
+     *
+     * An easy way to insert new row on table, just pass your data as associative array
+     *
+     * Eg:
+     * $this->insert(array(
+     *     'name' => 'Mike',
+     *     'age'  => 25,
+     * ));
+     *
+     * @param array  $data  An array to insert 
+     * @param string $table Pass the table if your object does not have a table
      * @access public
      * @return void
      */
@@ -232,6 +240,22 @@ class Model
         return $stmt->execute($data) OR print_r($stmt->errorInfo());
     }
 
+    /**
+     * update - Updates rows of table
+     * 
+     * Pass the associative array to update one or more rows on the database
+     *
+     * Eg:
+     * $this->update(array(
+     *     'name' => 'Rodrigo',
+     * ), array('id' => 21));
+     *
+     * @param mixed $data  The data to put on 
+     * @param array $where The where to update @see $this->_where
+     * @param mixed $table Table to update, optional. By default @use $this->_table
+     * @access public
+     * @return void
+     */
     public function update($data, array $where=array(), $table = null)
     {
         $sql = "UPDATE %s SET %s %s"; # table, key=value, where
@@ -253,6 +277,18 @@ class Model
         $stmt->execute(array_values($data));
     }
 
+    /**
+     * save - Saves the data on table. Updating or inserting data
+     * 
+     * Pass an associative array, if the array has the $this->_key value, just update
+     * else create a new record.
+     *
+     * @param array $data 
+     * @param array $where 
+     * @param mixed $table 
+     * @access public
+     * @return void
+     */
     public function save($data, array $where = array(), $table = null)
     {
         if (isset($data[$this->_key])) {
