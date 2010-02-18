@@ -8,6 +8,15 @@ class Model_Result
     private $_pages   = null;
     private $_altated = false;
 
+    /**
+     * __construct - Constroi um model_result
+     * 
+     * @param mixed $stmt 
+     * @param mixed $model 
+     * @param mixed $getRelatedJoin 
+     * @access public
+     * @return void
+     */
     public function __construct($stmt, $model, $getRelatedJoin=true)
     {
         $stmt->setFetchMode(PDO::FETCH_CLASS, 'Model_Result',
