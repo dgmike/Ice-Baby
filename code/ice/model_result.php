@@ -192,9 +192,13 @@ class Model_Result
     }
 
     public function save()
-    {
+    { 
         $data = $this->_data;
         $keys = array_fill_keys($this->_model->_hasMany, true);
+        $data = array_diff_key($data, $keys);
+        $keys = array_fill_keys(array($this->_model->_multipleJoin), true);
+        $data = array_diff_key($data, $keys);
+        $keys = array_fill_keys(array_keys($this->_model->_relatedJoin), true);
         $data = array_diff_key($data, $keys);
         return $this->_model->save($data);
     }
