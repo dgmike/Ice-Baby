@@ -6,6 +6,7 @@
 class Validate {
     var $error_email = 'O e-mail digitado não é válido!';
     var $error_empty = '%s é um campo obrigatório!';
+    var $error_match = 'Senhas não conferem!';
     /**
      *
      * @param <string> $email Email a ser validado
@@ -18,6 +19,10 @@ class Validate {
     
     public function is_empty($campo){
         return !preg_match('/^[a-zA-z0-9]/', $campo);
+    }
+
+    public function is_match($campo, $campo2){
+        return (bool)($campo==$campo2);
     }
 
 

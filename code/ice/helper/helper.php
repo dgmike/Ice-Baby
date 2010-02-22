@@ -142,6 +142,11 @@ function remove_acentos($string) {
     return $string;
 }
 
+/**
+ * seems_utf8
+ * @param string $str
+ * @return boolean
+ */
 function seems_utf8($str) {
     $length = strlen($str);
     for ($i=0; $i < $length; $i++) {
