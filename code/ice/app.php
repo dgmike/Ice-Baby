@@ -98,7 +98,7 @@ function ice_autoload($class, $routes){
 				$cleaned_parse = array_filter($parsePath);
 				$aKeys = array_keys($cleaned_parse);
 				
-				$controleArquivo = $parsePath[$aKeys[0]];
+				$controleArquivo = $aKeys ? $parsePath[$aKeys[0]] : "";
 				
 				#Desplurariza a palavra caso ela esteja no plural
 				if($ultimaLetra == 's')

@@ -1,6 +1,17 @@
 <?php
 require_once 'model_result.php';
 
+/**
+ * Model 
+ *
+ * Extends this Model for each table you use
+ * 
+ * @package 
+ * @version $id$
+ * @copyright 1997-2005 The PHP Group
+ * @author Michael Granados <michaelgranados@gmail.com> 
+ * @license PHP Version 3.0 {@link http://www.php.net/license/3_0.txt}
+ */
 class Model
 {
     static $_pdo = null;
@@ -11,8 +22,17 @@ class Model
     public $_multipleJoin = array();
     public $_relatedJoin = array();
 
-    public function __construct($dns=null, $username=null, $password=null,
-            array $driver_options = array())
+    /**
+     * __construct - creates the Model Object
+     * 
+     * @param string $dns           String to connect @see PDO
+     * @param string $username      Username to connect on database @see PDO
+     * @param string $password      Password to connect on database @see PDO
+     * @param array $driver_options Driver options @see PDO
+     * @access public
+     * @return void
+     */
+    public function __construct($dns=null, $username=null, $password=null, array $driver_options = array())
     {
         if (!$this->_table) {
             $this->_table = strtolower(get_class($this));
@@ -41,11 +61,30 @@ class Model
         }
     }
 
+    /**
+     * __call - Redirect to PDO
+     * 
+     * If you needs a PDO method, just use this object
+     *
+     * @param mixed $method 
+     * @param mixed $params 
+     * @access public
+     * @return PDO_result
+     */
     public function __call($method, $params)
     {
         return call_user_func_array(array(self::$_pdo, $method), $params);
     }
 
+    /**
+     * get - Get a row of table
+     *
+     * @TODO id will accept array where the $this->_key is an array
+     * 
+     * @param int $id ID you want to select
+     * @access public
+     * @return Model_Result
+     */
     public function get($id)
     {
         $sql = 'SELECT * FROM '.$this->_table.' WHERE '.$this->_key.' = ?';
@@ -56,13 +95,35 @@ class Model
         return $stmt->fetch();
     }
 
+    /**
+     * _where - Makes a where string
+     * 
+     * Makes a where string to helper the queries. You just need
+     * to pass an associative array or the where string.
+     *
+     * Eg:
+     * $table->_where(array(
+     *      'name LIKE' => 'Mike',
+     *      'age'       => 25,
+     *      'OR age'    => 30,
+     * ));
+     * $table->_where('name LIKE "%Mike%" AND age = 25 OR age = 25');
+     *
+     * @param array|string $where Where params
+     * @access public
+     * @return void
+     */
     public function _where($where = array())
     {
         $_where = array();
         if ('string'==gettype($where)) {
             $_where[] = $where;
-        } elseif (in_array(gettype($where), array('array', 'object'))) {
+        } elseif (is_scalar($where)) {
             foreach ($where as $key=>$value) {
+                // @TODO englobe array $value`s
+                // if ('array' === gettype($value)) {
+                //     $_where[] = '(' . $this->_where($value) . ')';
+                // }
                 $key = trim($key);
                 if (strpos(trim($key), ' ')===false) {
                     $key .= ' = ';
@@ -77,8 +138,27 @@ class Model
         return $_where ? ' WHERE '.implode(' ', $_where) : '';
     }
 
+	public function find($where = array(), $fields = '*', $limit = null,
+                            $offset = null, $order = null)
+	{
+		
+		return $this->select($where, $fields, $limit, $offset, $order, 'all');	
+	}
+
+    /**
+     * select - Do a simple select
+     * 
+     * It just select a resultset from a table
+     *
+     * @param array  $where  An where to select @see $this->_where
+     * @param string $fields Fields to select, allways select the $this->_key
+     * @param int    $limit  Limit to your select
+     * @param int    $offset Offset to your select
+     * @access public
+     * @return void
+     */
     public function select($where = array(), $fields = '*', $limit = null,
-                            $offset = null)
+                            $offset = null, $order = null, $fetch = null)
     {
         if (!$fields) {
             $fields = '*';
@@ -100,15 +180,36 @@ class Model
         if (!is_null($offset) OR !is_null($limit)) {
             $sql .= " LIMIT $offset$limit";
         }
+		if(!is_null($order)){
+			$sql .= " ORDER BY {$order}";
+		}
+
         $stmt = self::$_pdo->prepare($sql);
         $stmt->setFetchMode(PDO::FETCH_CLASS,
             'Model_Result', array($stmt, $this));
         $stmt->execute();
-        return $stmt->fetch();
+
+		if($fetch == 'all')
+        	return $stmt->fetchAll();
+		else
+			return $stmt->fetch();
+			
     }
 
-    public function page($fields = '*', $page = 1, $filter = null,
-                         $per_page = 20)
+    /**
+     * page - Makes a simple select using easy page limit
+     * 
+     * Its easy to make a paginable result to your project, just use
+     * this method.
+     *
+     * @param string $fields   String of fields to select, allways select $this->_key
+     * @param int    $page     Page to select
+     * @param mixed  $filter   Filter to your select, just a where clause @see $this->_where
+     * @param int    $per_page Quantity per page
+     * @access public
+     * @return void
+     */
+    public function page($fields = '*', $page = 1, $filter = null, $per_page = 20)
     {
         $offset = ($page-1) * $per_page;
         $limit  = $per_page;
@@ -125,6 +226,22 @@ class Model
         return $return;
     }
 
+    /**
+     * insert - Insert a new row on the database
+     *
+     * An easy way to insert new row on table, just pass your data as associative array
+     *
+     * Eg:
+     * $this->insert(array(
+     *     'name' => 'Mike',
+     *     'age'  => 25,
+     * ));
+     *
+     * @param array  $data  An array to insert 
+     * @param string $table Pass the table if your object does not have a table
+     * @access public
+     * @return void
+     */
     public function insert($data = array(), $table = null)
     {
         $sql   = 'INSERT INTO %s (%s) VALUES (%s)';
@@ -140,6 +257,22 @@ class Model
         return $stmt->execute($data) OR print_r($stmt->errorInfo());
     }
 
+    /**
+     * update - Updates rows of table
+     * 
+     * Pass the associative array to update one or more rows on the database
+     *
+     * Eg:
+     * $this->update(array(
+     *     'name' => 'Rodrigo',
+     * ), array('id' => 21));
+     *
+     * @param mixed $data  The data to put on 
+     * @param array $where The where to update @see $this->_where
+     * @param mixed $table Table to update, optional. By default @use $this->_table
+     * @access public
+     * @return void
+     */
     public function update($data, array $where=array(), $table = null)
     {
 
@@ -164,6 +297,18 @@ class Model
         $stmt->execute(array_values($data));
     }
 
+    /**
+     * save - Saves the data on table. Updating or inserting data
+     * 
+     * Pass an associative array, if the array has the $this->_key value, just update
+     * else create a new record.
+     *
+     * @param array $data 
+     * @param array $where 
+     * @param mixed $table 
+     * @access public
+     * @return void
+     */
     public function save($data, array $where = array(), $table = null)
     {
         if (isset($data[$this->_key])) {
