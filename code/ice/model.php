@@ -118,7 +118,7 @@ class Model
         $_where = array();
         if ('string'==gettype($where)) {
             $_where[] = $where;
-        } elseif (is_scalar($where)) {
+        } elseif (!is_scalar($where)) {
             foreach ($where as $key=>$value) {
                 // @TODO englobe array $value`s
                 // if ('array' === gettype($value)) {
@@ -287,14 +287,14 @@ class Model
             unset($data[$this->_key]);
         }
         foreach ($data as $key => $value) {
-            $_data[] = "$key = '$value'";
+            $_data[] = "$key = ?";
         }
         $where = $this->_where($where);
 
         $sql   = sprintf($sql, $table, implode(', ', $_data), $where);
-
         $stmt  = self::$_pdo->prepare($sql);
-        $stmt->execute(array_values($data));
+        $data = array_values($data);
+        $stmt->execute($data);
     }
 
     /**
