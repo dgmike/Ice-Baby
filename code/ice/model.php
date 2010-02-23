@@ -277,13 +277,13 @@ class Model
      */
     public function update($data, array $where=array(), $table = null)
     {
-
         $sql = "UPDATE %s SET %s %s"; # table, key=value, where
         if (!$table) {
             $table = $this->_table;
         }
         $data  = (array) $data;
         $_data = array();
+
         if (isset($data[$this->_key])) {
             $where[$this->_key] = $data[$this->_key];
             unset($data[$this->_key]);
@@ -291,9 +291,11 @@ class Model
         foreach ($data as $key => $value) {
             $_data[] = "$key = ?";
         }
+
         $where = $this->_where($where);
 
         $sql   = sprintf($sql, $table, implode(', ', $_data), $where);
+
         $stmt  = self::$_pdo->prepare($sql);
         $data = array_values($data);
         $stmt->execute($data);

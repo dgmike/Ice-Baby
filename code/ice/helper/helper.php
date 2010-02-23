@@ -231,8 +231,8 @@ function get_files( $origem ) {
     if($list_img) {
         foreach ($list_img as $item) {
             $item = str_replace('\\', '/', $item);
-            $barr = substr($_SERVER['DOCUMENT_ROOT'],-1)=='/'?'/':'';
-            $arr_files[] = "http://".str_replace($_SERVER['DOCUMENT_ROOT'], $_SERVER['HTTP_HOST'].$barr,$item);
+            $item = explode('/', $item);
+            $arr_files[] = array_pop($item);
         }
     }
     return $arr_files;
