@@ -166,6 +166,8 @@ class Model
         if (in_array(gettype($fields), array('object', 'array'))) {
             $fields = implode(', ', (array) $fields);
         }
+
+        $where = is_null($where)?array():$where;
         $sql = 'SELECT '.$fields.' FROM '.$this->_table;
         $sql .= $this->_where($where);
         if (!is_null($offset)) {
@@ -209,7 +211,7 @@ class Model
      * @access public
      * @return void
      */
-    public function page($fields = '*', $page = 1, $filter = array(), $per_page = 20)
+    public function page($fields = '*', $page = 1, $filter = null, $per_page = 20)
     {
         $offset = ($page-1) * $per_page;
         $limit  = $per_page;
