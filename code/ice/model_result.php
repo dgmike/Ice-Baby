@@ -58,22 +58,18 @@ class Model_Result
             $select = 'SELECT '.$o->_key.' FROM '.$table.$o->_where($where);
             $ids_r  = $o->query($select, PDO::FETCH_NUM);
             $ids    = array();
-            if (!$ids_r) {
-                continue;
+            if ($ids_r) {
+                foreach ($ids_r->fetchAll() as $id) {
+                    $ids[] = $id[0];
+                }
             }
-            foreach ($ids_r->fetchAll() as $id) {
-                $ids[] = $o->_key . ' = ' . $id[0];
-            }
-            if ($ids) {
-                $stmt = $o->prepare(
-                    'SELECT * FROM '.$o->_table.' WHERE '.
-                    implode(' OR ', $ids)
-                );
-                $stmt->setFetchMode(PDO::FETCH_CLASS,
-                    'Model_Result', array($stmt, $o, false));
-                $stmt->execute();
-                $this->_data[$key] = $stmt->fetch();
-            }
+            $ids = '(true = false) OR ( '.$o->_key.' IN ('.implode(',', $ids).') )';
+            $sql = 'SELECT * FROM '.$o->_table.' WHERE '. $ids;
+            $stmt = $o->prepare($sql);
+            $stmt->setFetchMode(PDO::FETCH_CLASS,
+                'Model_Result', array($stmt, $o, false));
+            $stmt->execute();
+            $this->_data[$key] = $stmt->fetch();
         }
     }
 
