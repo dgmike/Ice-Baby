@@ -225,7 +225,7 @@ function make_path($folder) {
     return $folder;
 }
 
-function get_files( $origem ) {
+function get_images( $origem ) {
     $arr_files=array();
     $list_img = glob($origem."{*.gif,*.bmp,*.png,*.jpg,*.jpeg}", GLOB_BRACE);
     if($list_img) {
