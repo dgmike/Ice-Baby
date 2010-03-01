@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 40
+/nr-cadastros/!svn/ver/95/trunk/lib/smtp
+END
+func.php
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/nr-cadastros/!svn/ver/10/trunk/lib/smtp/func.php
+END
+pop3.php
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/nr-cadastros/!svn/ver/10/trunk/lib/smtp/pop3.php
+END
+smtp.php
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/nr-cadastros/!svn/ver/95/trunk/lib/smtp/smtp.php
+END
+mime.php
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/nr-cadastros/!svn/ver/10/trunk/lib/smtp/mime.php
+END
