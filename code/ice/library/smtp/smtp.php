@@ -1077,7 +1077,7 @@ class SMTP extends MIME {
 			$arrval2[] = array('name' => 'Cc', 'value' => $ccstr);
 		}
 		if($bccstr != "") $arrval1[] = array('name' => 'Bcc', 'value' => $bccstr);
-		$arrval2[] = array('name' => 'Date', 'value' => date('r'));
+		$arrval2[] = array('name' => 'Date', 'value' => @date('r'));
 		if($this->_header && count($this->_header) > 0){
 			foreach($this->_header as $hvarr){
 				$arrval1[] = $hvarr;
