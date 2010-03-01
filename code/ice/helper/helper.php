@@ -282,3 +282,10 @@ function slugger($slug, $object, $id=null, $alternative='') {
     }
     return $slug;
 }
+
+function checked($esperado, $valor)
+{
+    if ($esperado === $valor) {
+        print ' checked="checked"';
+    }
+}
