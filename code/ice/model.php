@@ -92,6 +92,13 @@ class Model
         $stmt->setFetchMode(PDO::FETCH_CLASS,
             'Model_Result', array($stmt, $this));
         $stmt->execute(array($id));
+		
+		#Tratando os erros de SQL
+		$error = $stmt->errorInfo();
+		if(!is_null($error[1])){
+			die("<h1>SQL Error</h1> ({$error[1]}) {$error[2]}");
+		}
+		
         return $stmt->fetch();
     }
 
@@ -190,7 +197,13 @@ class Model
         $stmt->setFetchMode(PDO::FETCH_CLASS,
             'Model_Result', array($stmt, $this));
         $stmt->execute();
-
+		
+		#Tratando os erros de SQL
+		$error = $stmt->errorInfo();
+		if(!is_null($error[1])){
+			die("<h1>SQL Error</h1> ({$error[1]}) {$error[2]}");
+		}
+		
 		if($fetch == 'all')
         	return $stmt->fetchAll();
 		else
@@ -281,6 +294,7 @@ class Model
         if (!$table) {
             $table = $this->_table;
         }
+
         $data  = (array) $data;
         $_data = array();
 
@@ -288,6 +302,7 @@ class Model
             $where[$this->_key] = $data[$this->_key];
             unset($data[$this->_key]);
         }
+
         foreach ($data as $key => $value) {
             $_data[] = "$key = ?";
         }
@@ -298,8 +313,15 @@ class Model
 
         $stmt  = self::$_pdo->prepare($sql);
         $data = array_values($data);
+
         $stmt->execute($data);
-    }
+		
+		#Tratando os erros de SQL
+		$error = $stmt->errorInfo();
+		if(!is_null($error[1])){
+			die("<h1>SQL Error</h1> ({$error[1]}) {$error[2]}");
+		}
+	}
 
     /**
      * save - Saves the data on table. Updating or inserting data
@@ -327,13 +349,13 @@ class Model
         $sql = 'DELETE FROM '.$this->_table.$this->_where($where);
         $stmt = self::$_pdo->prepare($sql);
         $stmt->execute();
-        return $stmt->fetch();
+        return $stmt->fetch() OR print_r($stmt->errorInfo());
     }
 
     public function delete($id)
     {
         $sql = 'DELETE FROM '.$this->_table.' WHERE '.$this->_key.' = ?';
         $stmt = self::$_pdo->prepare($sql);
-        return $stmt->execute(array($id));
+        return $stmt->execute(array($id)) OR print_r($stmt->errorInfo());
     }
 }
