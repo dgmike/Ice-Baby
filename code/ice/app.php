@@ -120,10 +120,9 @@ function ice_autoload($class, $routes){
 }
 
 #Carrega helpers e librarys
-function ice_autoload_componnets($autoload){
-
-	if(is_array($autoload)):
-		foreach($autoload as $component => $array_compoents):
+function ice_autoload_componnets($load){
+	if(is_array($load)):
+		foreach($load as $component => $array_compoents):
 			foreach($array_compoents as $comp_name):
 				$component_singular = substr($component, 0, -1);
 		
