@@ -21,6 +21,11 @@ class Model
     public $_hasMany = array();
     public $_multipleJoin = array();
     public $_relatedJoin = array();
+    
+    public function __get($key)
+    {
+        return (property_exists($this, $key)) ? $this->$key : '';
+    }
 
     /**
      * __construct - creates the Model Object
