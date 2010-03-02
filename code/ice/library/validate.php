@@ -34,7 +34,7 @@ class Validate {
      * @return bool True caso seja igual
      */
     public function is_match($campo, $campo2){
-        return (bool)($campo==$campo2);
+        return (bool)($campo===$campo2);
     }
 
     /**

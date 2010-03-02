@@ -283,9 +283,26 @@ function slugger($slug, $object, $id=null, $alternative='') {
     return $slug;
 }
 
+/**
+ * Verifica se valor é igual ao esperado
+ * @param string $esperado Valor esperado
+ * @param string $valor Valor a comparar
+ */
 function checked($esperado, $valor)
 {
     if ($esperado === $valor) {
         print ' checked="checked"';
+    }
+}
+
+/**
+ * Verifica se valor é igual ao esperado
+ * @param string $esperado Valor esperado
+ * @param string $valor Valor a comparar
+ */
+function selected($esperado, $valor)
+{
+    if ($esperado === $valor) {
+        print ' selected="selected"';
     }
 }
