@@ -322,7 +322,7 @@ class Model
 		
 		#Tratando os erros de SQL
 		$error = $stmt->errorInfo();
-		if(!is_null($error[1])){
+		if(isset($error[1]) AND !is_null($error[1])){
 			die("<h1>SQL Error</h1> ({$error[1]}) {$error[2]}");
 		}
 	}
