@@ -60,7 +60,6 @@ class Model
             self::$_pdo = new PDO($dns, $username, $password, $driver_options);
         }
     }
-
     /**
      * __call - Redirect to PDO
      * 

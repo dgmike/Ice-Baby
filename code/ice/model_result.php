@@ -100,7 +100,7 @@ class Model_Result
 
     public function __get($key)
     {
-        return isset($this->_data[$key]) ? $this->_data[$key] : '';
+        return (array_key_exists($key, $this->_data)) ? $this->_data[$key] : '';
     }
 
     public function __call($method, $args)
