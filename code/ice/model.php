@@ -21,6 +21,11 @@ class Model
     public $_hasMany = array(); // deprecated
     public $_multipleJoin = array(); // usa tabela tercearia
     public $_relatedJoin = array();  // um para um
+    
+    public function __get($key)
+    {
+        return (property_exists($this, $key)) ? $this->$key : '';
+    }
 
     /**
      * __construct - creates the Model Object
@@ -60,7 +65,6 @@ class Model
             self::$_pdo = new PDO($dns, $username, $password, $driver_options);
         }
     }
-
     /**
      * __call - Redirect to PDO
      * 
@@ -95,7 +99,7 @@ class Model
 		
 		#Tratando os erros de SQL
 		$error = $stmt->errorInfo();
-		if(!is_null($error[1])){
+		if(isset($error[1])){
 			die("<h1>SQL Error</h1> ({$error[1]}) {$error[2]}");
 		}
 		
@@ -200,7 +204,7 @@ class Model
 		
 		#Tratando os erros de SQL
 		$error = $stmt->errorInfo();
-		if(!is_null($error[1])){
+		if(isset($error[1])){
 			die("<h1>SQL Error</h1> ({$error[1]}) {$error[2]}");
 		}
 		
@@ -318,7 +322,7 @@ class Model
 		
 		#Tratando os erros de SQL
 		$error = $stmt->errorInfo();
-		if(!is_null($error[1])){
+		if(isset($error[1]) AND !is_null($error[1])){
 			die("<h1>SQL Error</h1> ({$error[1]}) {$error[2]}");
 		}
 	}

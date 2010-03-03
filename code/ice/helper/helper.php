@@ -240,20 +240,11 @@ function get_images( $origem ) {
 
 /**
  * isLogged Verifica se o usuário está logado dependendo do valor da sessão de chave "login"
- * @global Object $msgObject Objeto com métodos para tratamento de mensagens no sistema
- * @return boolean Retorna true caso o usuário esteja logado, ou false
+  * @return boolean Retorna true caso o usuário esteja logado, ou false
  */
 function isLogged()
 {
-    global $msgObject;
-    if (!isset($_SESSION['login']) OR !$_SESSION['login']) {
-        if (isset($_SESSION['erro'])) {
-            $msgObject->add($_SESSION['erro'], 'error');
-            unset($_SESSION['erro']);
-        }
-        return false;
-    }
-    return true;
+    return (isset($_SESSION['login']) AND $_SESSION['login']);
 }
 
 /**
@@ -290,4 +281,28 @@ function slugger($slug, $object, $id=null, $alternative='') {
         $where['slug'] = $slug;
     }
     return $slug;
+}
+
+/**
+ * Verifica se valor é igual ao esperado
+ * @param string $esperado Valor esperado
+ * @param string $valor Valor a comparar
+ */
+function checked($esperado, $valor)
+{
+    if ($esperado === $valor) {
+        print ' checked="checked"';
+    }
+}
+
+/**
+ * Verifica se valor é igual ao esperado
+ * @param string $esperado Valor esperado
+ * @param string $valor Valor a comparar
+ */
+function selected($esperado, $valor)
+{
+    if ($esperado === $valor) {
+        print ' selected="selected"';
+    }
 }
