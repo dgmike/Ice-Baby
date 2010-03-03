@@ -7,6 +7,7 @@ class Model_Result
     private $_data    = array();
     private $_pages   = null;
     private $_altated = false;
+    public $_extra   = null;
 
     /**
      * __construct - Constroi um model_result
@@ -17,7 +18,7 @@ class Model_Result
      * @access public
      * @return void
      */
-    public function __construct($stmt, $model, $getRelatedJoin=true)
+    public function __construct($stmt, $model, $getRelatedJoin=true, $extra_select=false)
     {
         $stmt->setFetchMode(PDO::FETCH_CLASS, 'Model_Result',
             array($stmt, $model));
@@ -37,6 +38,13 @@ class Model_Result
         if ($getRelatedJoin) {
             $this->mk_multiple_joins();
             $this->mk_related_join();
+        }
+        if ($extra_select) {
+            preg_match('@:(\w+):@', $extra_select['sqlJoin'], $matches);
+            $id_join = $this->_data[$matches[1]];
+            $sql_join = str_replace($matches[0], $id_join, $extra_select['sqlJoin']);
+            $r = $this->_model->query($sql_join);
+            $this->_extra[$extra_select['table']] = $r->fetch();
         }
     }
 
@@ -65,9 +73,17 @@ class Model_Result
             }
             $ids = '(true = false) OR ( '.$o->_key.' IN ('.implode(',', $ids).') )';
             $sql = 'SELECT * FROM '.$o->_table.' WHERE '. $ids;
+
+            $sqlJoin = PHP_EOL.
+                'SELECT t.* FROM '.$table.' t '.PHP_EOL.
+                ' WHERE '.PHP_EOL.
+                '         t.'.$model->_key.' = '.$this->_data[$model->_key].PHP_EOL.
+                '     AND t.'.$o->_key.' = :'.$o->_key.':';
+            $sqlJoin = compact('table', 'sqlJoin');
+
             $stmt = $o->prepare($sql);
             $stmt->setFetchMode(PDO::FETCH_CLASS,
-                'Model_Result', array($stmt, $o, false));
+                'Model_Result', array($stmt, $o, false, $sqlJoin));
             $stmt->execute();
             $this->_data[$key] = $stmt->fetch();
         }
@@ -79,10 +95,10 @@ class Model_Result
         foreach ($model->_relatedJoin as $key => $value) {
             $i = ucfirst(strtolower($value));
             $o = new $i;
-        if (!isset($this->_data[$model->_key])) {
-            continue;
-        }
-        $this->_data[$key] = $o->get($this->_data[trim($o->_key)]);
+            if (!isset($this->_data[$model->_key])) {
+                continue;
+            }
+            $this->_data[$key] = $o->get($this->_data[trim($o->_key)]);
         }
     }
 

@@ -18,9 +18,9 @@ class Model
     public $_table = null;
     public $_key = null;
     public $_str = null;
-    public $_hasMany = array();
-    public $_multipleJoin = array();
-    public $_relatedJoin = array();
+    public $_hasMany = array(); // deprecated
+    public $_multipleJoin = array(); // usa tabela tercearia
+    public $_relatedJoin = array();  // um para um
 
     /**
      * __construct - creates the Model Object
