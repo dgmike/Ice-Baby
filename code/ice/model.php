@@ -89,12 +89,12 @@ class Model
      * @access public
      * @return Model_Result
      */
-    public function get($id)
+    public function get($id, $oneLevel = true)
     {
         $sql = 'SELECT * FROM '.$this->_table.' WHERE '.$this->_key.' = ?';
         $stmt = self::$_pdo->prepare($sql);
         $stmt->setFetchMode(PDO::FETCH_CLASS,
-            'Model_Result', array($stmt, $this));
+            'Model_Result', array($stmt, $this, $oneLevel));
         $stmt->execute(array($id));
 		
 		#Tratando os erros de SQL
@@ -198,12 +198,15 @@ class Model
         }
 
         $stmt = self::$_pdo->prepare($sql);
-        if ($fetch != 'all') {
+        if ($fetch == 'all') {
+            $stmt->setFetchMode(PDO::FETCH_OBJ);
+        } elseif ($fetch == 'one') {
+            $stmt->setFetchMode(PDO::FETCH_CLASS,
+                'Model_Result', array($stmt, $this), false);
+        } else {
             $stmt->setFetchMode(PDO::FETCH_CLASS,
                 'Model_Result', array($stmt, $this));
         }
-
-        $stmt->setFetchMode(PDO::FETCH_OBJ);
 
         $stmt->execute();
         #Tratando os erros de SQL

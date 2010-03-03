@@ -95,10 +95,10 @@ class Model_Result
         foreach ($model->_relatedJoin as $key => $value) {
             $i = ucfirst(strtolower($value));
             $o = new $i;
-            if (!isset($this->_data[$model->_key])) {
+            if (!isset($this->_data[$model->_key]) || !is_scalar($model->_key)) {
                 continue;
             }
-            $this->_data[$key] = $o->get($this->_data[trim($o->_key)]);
+            $this->_data[$key] = $o->get($this->_data[trim($o->_key)], null, 'one');
         }
     }
 
