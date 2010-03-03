@@ -193,26 +193,30 @@ class Model
         if (!is_null($offset) OR !is_null($limit)) {
             $sql .= " LIMIT $offset$limit";
         }
-		if(!is_null($order)){
-			$sql .= " ORDER BY {$order}";
-		}
+        if(!is_null($order)){
+            $sql .= " ORDER BY {$order}";
+        }
 
         $stmt = self::$_pdo->prepare($sql);
-        $stmt->setFetchMode(PDO::FETCH_CLASS,
-            'Model_Result', array($stmt, $this));
+        if ($fetch != 'all') {
+            $stmt->setFetchMode(PDO::FETCH_CLASS,
+                'Model_Result', array($stmt, $this));
+        }
+
+        $stmt->setFetchMode(PDO::FETCH_OBJ);
+
         $stmt->execute();
-		
-		#Tratando os erros de SQL
-		$error = $stmt->errorInfo();
-		if(isset($error[1])){
-			die("<h1>SQL Error</h1> ({$error[1]}) {$error[2]}");
-		}
-		
-		if($fetch == 'all')
-        	return $stmt->fetchAll();
-		else
-			return $stmt->fetch();
-			
+        #Tratando os erros de SQL
+        $error = $stmt->errorInfo();
+        if(isset($error[1])){
+            die("<h1>SQL Error</h1> ({$error[1]}) {$error[2]}");
+        }
+
+        if ($fetch == 'all') {
+            return $stmt->fetchAll();
+        }
+
+        return $stmt->fetch();
     }
 
     /**
