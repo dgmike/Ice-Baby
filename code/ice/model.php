@@ -100,7 +100,7 @@ class Model
 		#Tratando os erros de SQL
 		$error = $stmt->errorInfo();
 		if(isset($error[1])){
-			die("<h1>SQL Error</h1> ({$error[1]}) {$error[2]}");
+			throw new Exception ("<h1>SQL Error</h1> ({$error[1]}) {$error[2]}");
 		}
 		
         return $stmt->fetch();
@@ -212,7 +212,7 @@ class Model
         #Tratando os erros de SQL
         $error = $stmt->errorInfo();
         if(isset($error[1])){
-            die("<h1>SQL Error</h1> ({$error[1]}) {$error[2]}");
+            throw new Exception ("<h1>SQL Error</h1> ({$error[1]}) {$error[2]}");
         }
 
         if ($fetch == 'all') {
@@ -280,7 +280,11 @@ class Model
         $vals = implode(', ', array_fill(0, count($data), '?'));
         $sql  = sprintf($sql, $table, $keys, $vals);
         $stmt = self::$_pdo->prepare($sql);
-        return $stmt->execute($data) OR print_r($stmt->errorInfo());
+		$error = $stmt->errorInfo();
+		if(isset($error[1])){
+            throw new Exception ("<h1>SQL Error</h1> ({$error[1]}) {$error[2]}");
+        }        
+		return $stmt->execute($data);
     }
 
     /**
@@ -330,7 +334,7 @@ class Model
 		#Tratando os erros de SQL
 		$error = $stmt->errorInfo();
 		if(isset($error[1]) AND !is_null($error[1])){
-			die("<h1>SQL Error</h1> ({$error[1]}) {$error[2]}");
+	        throw new Exception ("<h1>SQL Error</h1> ({$error[1]}) {$error[2]}");
 		}
 	}
 
@@ -360,13 +364,23 @@ class Model
         $sql = 'DELETE FROM '.$this->_table.$this->_where($where);
         $stmt = self::$_pdo->prepare($sql);
         $stmt->execute();
-        return $stmt->fetch() OR print_r($stmt->errorInfo());
+		$error = $stmt->errorInfo();
+		if(isset($error[1])){
+            throw new Exception ("<h1>SQL Error</h1> ({$error[1]}) {$error[2]}");
+        }
+
+        return $stmt->fetch();
     }
 
     public function delete($id)
     {
         $sql = 'DELETE FROM '.$this->_table.' WHERE '.$this->_key.' = ?';
         $stmt = self::$_pdo->prepare($sql);
-        return $stmt->execute(array($id)) OR print_r($stmt->errorInfo());
+		$error = $stmt->errorInfo();
+		if(isset($error[1])){
+            throw new Exception ("<h1>SQL Error</h1> ({$error[1]}) {$error[2]}");
+        }
+
+        return $stmt->execute(array($id));
     }
 }

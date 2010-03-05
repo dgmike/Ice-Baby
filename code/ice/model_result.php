@@ -278,7 +278,15 @@ class Model_Result
         }
         $sql = "INSERT INTO $table ({$this->_model->_key}, {$o->_key})
                 VALUES ({$this->_data[$this->_model->_key]}, {$add})";
-        $o->exec($sql) OR print_r(array($o->errorInfo(), $sql));
+		
+		
+        $o->exec($sql);
+
+		$error = $o->errorInfo();
+		if(isset($error[1])){
+            throw new Exception ("<h1>SQL Error</h1> ({$error[1]}) {$error[2]}");
+        }
+		 
         $this->mk_multiple_joins();
         return true;
     }
@@ -305,6 +313,11 @@ class Model_Result
         }
         $sql = 'DELETE FROM '.$table.' WHERE '.$o->_key.' = '.$remove;
         $o->exec($sql);
+
+		$error = $o->errorInfo();
+		if(isset($error[1])){
+            throw new Exception ("<h1>SQL Error</h1> ({$error[1]}) {$error[2]}");
+        }
         $this->mk_multiple_joins();
         return true;
     }
