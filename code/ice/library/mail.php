@@ -20,7 +20,8 @@ class Mail  {
         if(is_null($resppara)){
             $strparms="From: $de";
         }else{
-            $strparms="From: $de\r\nReply-to: $resppara\r\n";
+            $strparms = "From: $name <$de>\r\nReply-To: $resppara\r\n";
+            //$strparms ="From: $de\r\nReply-to: $resppara\r\n";
         }
         $usenativemail = USENATIVEMAIL;
         if($usenativemail){
