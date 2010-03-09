@@ -89,6 +89,8 @@ function ice_autoload($class, $routes){
 	if(is_array($routes)):
 
 		$path_info = preg_replace('@/admin/?@', '', $_SERVER['PATH_INFO']);
+		$path_info = preg_replace('@s/?@', '/', $_SERVER['PATH_INFO']);
+		
 		foreach($routes as $regex => $className):
 			if($className == $class):
 				$parsePath = explode('/',$path_info);
