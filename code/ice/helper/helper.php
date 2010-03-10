@@ -306,3 +306,7 @@ function selected($esperado, $valor)
         print ' selected="selected"';
     }
 }
+
+function fomataData($date){
+	return (strstr($date, '-')) ? implode('/', array_reverse(explode('-',$date))) : implode('-', array_reverse(explode('/',$date)));
+}
