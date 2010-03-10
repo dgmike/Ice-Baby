@@ -190,11 +190,11 @@ class Model
         if (!is_null($limit) AND !is_null($offset)) {
             $offset .= ',';
         }
-        if (!is_null($offset) OR !is_null($limit)) {
-            $sql .= " LIMIT $offset$limit";
-        }
         if(!is_null($order)){
             $sql .= " ORDER BY {$order}";
+        }
+		if (!is_null($offset) OR !is_null($limit)) {
+            $sql .= " LIMIT $offset$limit";
         }
 
         $stmt = self::$_pdo->prepare($sql);
