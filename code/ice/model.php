@@ -136,14 +136,20 @@ class Model
                 //     $_where[] = '(' . $this->_where($value) . ')';
                 // }
                 $key = trim($key);
-                if (strpos(trim($key), ' ')===false) {
+                if (strpos(trim($key), ' ')===false AND !is_null($value)) {
                     $key .= ' = ';
                 }
                 if ($_where AND !preg_match('@^(and|or)\b@i', $key)) {
                     $key = "AND $key";
                 }
-                self::$_pdo->quote($value);
-                $_where[] = "$key '$value'";
+                if($value != null) {
+					self::$_pdo->quote($value); 
+					$_where[] = "$key '$value'";
+				} else {
+					$value = 'is NULL';
+					$_where[] = "$key $value";
+				} 
+                
             }
         }
         return $_where ? ' WHERE '.implode(' ', $_where) : '';
@@ -196,7 +202,7 @@ class Model
 		if (!is_null($offset) OR !is_null($limit)) {
             $sql .= " LIMIT $offset$limit";
         }
-
+		echo $sql;
         $stmt = self::$_pdo->prepare($sql);
         if ($fetch == 'all') {
             $stmt->setFetchMode(PDO::FETCH_OBJ);
