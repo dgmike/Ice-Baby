@@ -202,7 +202,7 @@ class Model
 		if (!is_null($offset) OR !is_null($limit)) {
             $sql .= " LIMIT $offset$limit";
         }
-		echo $sql;
+
         $stmt = self::$_pdo->prepare($sql);
         if ($fetch == 'all') {
             $stmt->setFetchMode(PDO::FETCH_OBJ);
