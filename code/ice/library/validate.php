@@ -5,7 +5,7 @@
  */
 class Validate {
     var $_error_email = 'O e-mail digitado não é válido!';
-    var $_error_empty = '- %s é um campo obrigatório!';
+    var $_error_empty = '- <b>%s</b> é um campo obrigatório!';
     var $_error_match = 'Senhas não conferem!';
 
     /**
@@ -24,7 +24,7 @@ class Validate {
      * @return bool True caso seja vazio
      */
     public function is_empty($campo){
-        return (bool)!preg_match('/^[a-zA-z0-9]/', $campo);
+        return (bool)!preg_match('/^[a-zA-z0-9<\/>]/', $campo);
     }
 
     /**

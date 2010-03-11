@@ -308,15 +308,53 @@ function selected($esperado, $valor)
 }
 
 /**
- * Função que formata de acordo com o formato da data passada.
- * 
- * @uses echo formataData('01/02/2010'); // output 2010-02-01
- * @uses echo formataData('2010-02-01'); // output 01/02/2010
- *
- * @param string $date 
- * @return void
- * @author Igor Escobar
+ * Retira qualquer tag html dos valores de um array e não retira os
+ * valores passados no array $allow();
+ * @param array $dados Array associativo contendo chave e valor = string html
+ * @param array $allow Array contendo os valores que correspondem as chaves do
+ * array $dados cujas tag's html não serão retiradas.
+ * @return array Retorna um array completo com os valores que foram permitidos
+ * e os valores cujas tags html foram retiradas.
+ * @example
+ * <code>
+ *     $lista = array(
+ *         'nome' => '<b>Neste teste esta string continuará em negrito</b>',
+ *         'desc' => '<b>Porém esta não</b>'
+ *     );
+ *     clear_html($lista, array('nome'));
+ *     // Isto retornará:
+ *     // $lista = array(
+ *     //     'nome' => '<b>Neste teste esta string continuará em negrito</b>',
+ *     //     'desc' => 'Porém esta não'
+ *     // );
+ * </code>
  */
+function limpa_html($dados, $allow=array()) {
+    $n_array = array();
+    foreach ($allow as $item) {
+        if (array_key_exists($item, $dados)){
+            $n_array[$item] = $dados[$item];
+            unset($dados[$item]);
+        }
+    }
+    foreach ($dados as $item) {
+        $dados = preg_replace('#</?(\w+)[^>]*>#is', '', $dados);
+    }
+    $dados += $n_array;
+    return $dados;
+}
+
+/*
+* Função que formata de acordo com o formato da data passada.
+* 
+* @uses echo formataData('01/02/2010'); // output 2010-02-01
+* @uses echo formataData('2010-02-01'); // output 01/02/2010
+*
+* @param string $date 
+* @return void
+* @author Igor Escobar
+*/
+
 function fomataData($date){
 	return (strstr($date, '-')) ? implode('/', array_reverse(explode('-',$date))) : implode('-', array_reverse(explode('/',$date)));
 }

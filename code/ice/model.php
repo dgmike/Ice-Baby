@@ -21,6 +21,7 @@ class Model
     public $_hasMany = array(); // deprecated
     public $_multipleJoin = array(); // usa tabela tercearia
     public $_relatedJoin = array();  // um para um
+    public $_allow_html = array(); // array com o nome dos campos que não serão limpos pelo limpa_html
     
     public function __get($key)
     {
@@ -358,6 +359,7 @@ class Model
      */
     public function save($data, array $where = array(), $table = null)
     {
+        $data = limpa_html($data, $this->_allow_html);
         if (isset($data[$this->_key])) {
             $this->update($data, $where, $table);
         } else {
