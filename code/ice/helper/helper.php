@@ -343,3 +343,6 @@ function limpa_html($dados, $allow=array()) {
     $dados += $n_array;
     return $dados;
 }
+
+function fomataData($date){
+	return (strstr($date, '-')) ? implode('/', array_reverse(explode('-',$date))) : implode('-', array_reverse(explode('/',$date)));
