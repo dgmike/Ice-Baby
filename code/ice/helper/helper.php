@@ -307,6 +307,16 @@ function selected($esperado, $valor)
     }
 }
 
+/**
+ * Função que formata de acordo com o formato da data passada.
+ * 
+ * @uses echo formataData('01/02/2010'); // output 2010-02-01
+ * @uses echo formataData('2010-02-01'); // output 01/02/2010
+ *
+ * @param string $date 
+ * @return void
+ * @author Igor Escobar
+ */
 function fomataData($date){
 	return (strstr($date, '-')) ? implode('/', array_reverse(explode('-',$date))) : implode('-', array_reverse(explode('/',$date)));
 }
