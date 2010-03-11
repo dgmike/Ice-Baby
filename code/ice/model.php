@@ -143,7 +143,7 @@ class Model
                 if ($_where AND !preg_match('@^(and|or)\b@i', $key)) {
                     $key = "AND $key";
                 }
-                if($value != null) {
+                if($value !== null) {
 					self::$_pdo->quote($value); 
 					$_where[] = "$key '$value'";
 				} else {
@@ -214,8 +214,8 @@ class Model
             $stmt->setFetchMode(PDO::FETCH_CLASS,
                 'Model_Result', array($stmt, $this));
         }
-
         $stmt->execute();
+        
         #Tratando os erros de SQL
         $error = $stmt->errorInfo();
         if(isset($error[1])){
@@ -225,7 +225,6 @@ class Model
         if ($fetch == 'all') {
             return $stmt->fetchAll();
         }
-
         return $stmt->fetch();
     }
 
