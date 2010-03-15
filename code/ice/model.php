@@ -276,6 +276,7 @@ class Model
      */
     public function insert($data = array(), $table = null)
     {
+        $data = limpa_html($data, $this->_allow_html);
         $sql   = 'INSERT INTO %s (%s) VALUES (%s)';
         $data  = (array) $data;
         if (null === $table) {
@@ -311,6 +312,7 @@ class Model
      */
     public function update($data, array $where=array(), $table = null)
     {
+        $data = limpa_html($data, $this->_allow_html);
         $sql = "UPDATE %s SET %s %s"; # table, key=value, where
         if (!$table) {
             $table = $this->_table;
@@ -358,7 +360,6 @@ class Model
      */
     public function save($data, array $where = array(), $table = null)
     {
-        $data = limpa_html($data, $this->_allow_html);
         if (isset($data[$this->_key])) {
             $this->update($data, $where, $table);
         } else {

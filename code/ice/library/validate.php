@@ -7,6 +7,7 @@ class Validate {
     var $_error_email = 'O e-mail digitado não é válido!';
     var $_error_empty = '- <b>%s</b> é um campo obrigatório!';
     var $_error_match = 'Senhas não conferem!';
+    var $_error_slug  = 'Slug somente aceita letras, números, traço e sublinhado';
 
     /**
      * is_valid_mail() Verifica se um email passado como parametro em $mail, é válido
@@ -16,6 +17,16 @@ class Validate {
     public function is_valid_mail($email) {
 		$pattern = '/^([a-z0-9])(([-a-z0-9._])*([a-z0-9]))*\@([a-z0-9])(([a-z0-9-])*([a-z0-9]))+(\.([a-z0-9])([-a-z0-9_-])?([a-z0-9])+)+$/i';
     	if (preg_match($pattern, $email)) return true;
+    }
+
+    /**
+     * is_valid_slug() Verifica se um slug passado como parametro é aceito
+     * @param string $slug Slug a ser validado
+     * @return bool True caso o slug seja válido ou null
+     */
+    public function is_valid_slug($slug) {
+		$pattern = '@^([a-zA-Z0-9_-])+$@';
+    	if (preg_match($pattern, $slug)) return true;
     }
 
     /**
@@ -58,6 +69,13 @@ class Validate {
      */
     public function error_match(){
         return $this->_error_match;
+    }
+
+    /**
+     * Exibe uma mensagem de erro personalizada
+     */
+    public function error_slug(){
+        return $this->_error_slug;
     }
 
 
