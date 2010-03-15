@@ -4,10 +4,10 @@
  * @author ldmotta
  */
 class Validate {
-    var $_error_email = 'O e-mail digitado não é válido!';
+    var $_error_email = '- O e-mail digitado não é válido!';
     var $_error_empty = '- <b>%s</b> é um campo obrigatório!';
-    var $_error_match = 'Senhas não conferem!';
-    var $_error_slug  = 'Slug somente aceita letras, números, traço e sublinhado';
+    var $_error_match = '- Senhas não conferem!';
+    var $_error_slug  = '- <b>Slug</b> somente aceita letras, números, traço e sublinhado';
 
     /**
      * is_valid_mail() Verifica se um email passado como parametro em $mail, é válido
