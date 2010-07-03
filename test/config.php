@@ -1,4 +1,5 @@
 <?php
+
 define('TEST_ICE_BASE_URL', 'http://localhost/Ice-Baby/test');
 
 $path = dirname(dirname(__FILE__))
